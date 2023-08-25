@@ -10,5 +10,6 @@
     "functional": "cpp",
     "tuple": "cpp",
     "vector": "cpp"
-  }
+  },
+  "C_Cpp.errorSquiggles": "disabled"
 }
