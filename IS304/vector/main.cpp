@@ -1,14 +1,16 @@
 #include <iostream>
+#include <string>
 #include <vector.hh>
 
 int main() {
-  vector<int> VECTOR;
-  for (size_t i = 0; i < 10; i++) {
-    VECTOR.push_back(i);
+  vector<int> vector_uno;
+  for (int i = 0; i < 5; i++) {
+    vector_uno.push_back(i);
   }
-  for (size_t i = 0; i < VECTOR.size(); i++) {
-    std::cout << VECTOR.at(i) << std::endl;
+  vector<int> vector_dos;
+  for (int i = 0; i < 3; i++) {
+    vector_dos.push_back(i*5);
   }
-  
+
   return 0;
 }
