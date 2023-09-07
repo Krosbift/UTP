@@ -1,6 +1,4 @@
-#ifndef mivector
-
-#include <iostream>
+#ifndef myvector
 
 typedef unsigned int sz;
 
@@ -12,9 +10,31 @@ class vector {
       * con capacidad de 5 y 0 elementos.
       * @result instancia de una clase con un vector sin elementos.
       * */
-    vector() : capacity(5), elements(0), storage(new T[capacity]) {
-      std::cout << "Constructor simple llamado.\n";
-    };
+    vector() : capacity(5), elements(0), storage(new T[capacity]) { };
+
+    /** Constructor para inicializar una instancia de la clase vector con la capacidad
+      * que pase como parametro:
+      * @result instancia de una clase con un vector sin elementos y con la capacidad elejida.
+      * */
+    vector(sz cap): capacity(cap), elements(0), storage(new T[capacity]) { }
+
+    /** Contructor para inicializar un vector como copia de un array, con una capacidad de cinco
+      * superior a la del array que se ha copiado:
+      * @param array arreglo que se va a copiar y a generar como un vector.
+      * @param size tamaño del arreglo que se va copiar.
+      * @result la instancia de la clase con un vector que es copia del array añadido como parametro.
+      * */
+    vector(T *array_copy, sz size): capacity(size + 5), elements(size), storage(new T[capacity]) {
+      for (int i = 0; i < elements; ++i) {
+        storage[i] = array_copy[i];
+      }
+    }
+
+    /** Destructor para liberar memoria del heap ocupada por el vector:
+      * */
+    ~vector() {
+      delete[] storage;
+    }
 
   private:
     sz capacity;
@@ -26,8 +46,6 @@ class vector {
     * @result aumenta la capacidad del vector.
     * */
     void resize(int increment) {
-      std::cout << "Resize ejecutado.\n";
-
       capacity += increment;
       T* new_storage = new T[capacity];
 
@@ -39,22 +57,31 @@ class vector {
       storage = new_storage;
     }
 
-    /** Se encarga de devolver si el vector esta vacio o no:
+    /** Se encarga de devolver si el vector esta vacio o no,
+      * devolviendo verdadero de estar vacio y falso en caso contrario
       * */
     int empty() {
-      if (elements == 0){
-        return 1;
-      }
-      return 0;
+      return elements == 0;
     }
+
   public:
     
+    /** operador de sobrecarga para los corchetes, para acceder a los elementos del vector
+      * con la notacion de acceso comun de arreglos.
+      * @return el elemento del vector en la posicion indicada.
+      * */
+    T& operator[](sz posicion) {
+      if (posicion >= elements || posicion < 0) {
+        throw std::out_of_range("Index out of range");
+      }
+      return storage[posicion];
+    }
+
+
     /** Retorna el total de elementos del vector.
       * @return total de elementos del vector. 
       * */
     sz size() {
-      std::cout << "Size ejecutado.\n";
-
       return elements;
     };
 
@@ -62,8 +89,6 @@ class vector {
       * @return espacio libre del vector.
       * */
     sz waste() {
-      std::cout << "Waste ejecutado.\n";
-
       return capacity - elements;
     }
 
@@ -72,8 +97,6 @@ class vector {
       * @result agrega el elemento al final del vector.
       * */
     void push_back(T element) {
-      std::cout << "Push back ejecutado.\n";
-
       if (capacity == elements) {
         resize(5);
       }
@@ -86,8 +109,6 @@ class vector {
       * @result elimina el ultimo elemento del vector.
       * */
     void pop_back() {
-      std::cout << "Pop back ejecutado.\n";
-
       if (empty()){
         throw std::domain_error("vector is empty");
       }
@@ -100,8 +121,6 @@ class vector {
       * @result el vector con el nuevo elemento al inico.
       * */
     void push_front(T element) {
-      std::cout << "Push front ejecutado.\n";
-
       if (capacity == elements) {
         resize(5);
       }
@@ -118,8 +137,6 @@ class vector {
       * @result el vector sin el primer elemento.
       * */
     void pop_front() {
-      std::cout << "Pop front ejecutado.\n";
-
       if (empty()){
         throw std::domain_error("vector is empty");
       }
@@ -137,10 +154,8 @@ class vector {
       * @result el vector con el nuevo elemento en la posicion indicada.
       * */
     void insert_element(T element, sz posicion) {
-      std::cout << "Insert element ejecutado.\n";
-
       if (posicion > elements && posicion < 0) {
-        throw std::domain_error("la posicion excede el rango");
+        throw std::domain_error("Index out of range");
       }
 
       if (capacity == elements) {
@@ -160,8 +175,6 @@ class vector {
       * @result el vector sin el elemento en la posicion indicada.
       * */
     void remove(sz posicion) {
-      std::cout << "Remove ejecutado.\n";
-
       if (empty()){
         throw std::domain_error("vector is empty");
       }
@@ -180,8 +193,6 @@ class vector {
       * @result el vector con la nueva capacidad.
       */
     void shrink_to_fit() {
-      std::cout << "Shrink to fit ejecutado.\n";
-
       T* new_storage = new T[elements];
       
       for (int i = 0; i < elements; i++) {
@@ -195,16 +206,26 @@ class vector {
 
 
     /** Devuelve una referencia hacia el elemento de una posición especifica del vector:
-      * @param index posición del elemento que se va a devolver como referencia.
+      * @param posicion posición del elemento que se va a devolver como referencia.
       * @return una referencia con la direccion al valor almacena en la posicion solicitada. 
       * */
     T& at(sz posicion) {
-      std::cout << "at ejecutado.\n";
-
       if (posicion >= elements || posicion < 0) {
         throw std::out_of_range("Index out of range");
       }
       return storage[posicion];
+    }
+
+    /** Cambia el valor de un elemento del vector a partir de su posición:
+      * @param posicion posición del elemento que se va a cambiar.
+      * @param element es el elemento que se va a asignar a la posicion.
+      * @result el vector con el nuevo elemento en la posicion indicada. 
+      * */
+    void at(sz posicion, T& element) {
+      if (posicion >= elements || posicion < 0) {
+        throw std::out_of_range("Index out of range");
+      }
+      storage[posicion] = element;
     }
 
     /** Se encarga de insertar un vector en un determinado lugar del vector, teniendo en cuenta que la posición 0 sera la inicial tambien conocida como el primer elemento. (vector[0]).
@@ -213,8 +234,6 @@ class vector {
       * @result el vector con el nuevo vector en la posicion indicada.
       * */
     void insert_vector(vector<T>& other_vector, sz posicion) {
-      std::cout << "Insert vector ejecutado.\n";
-
       if (posicion >= elements || posicion < 0) {
         throw std::domain_error("la posicion excede el rango");
       }
@@ -233,10 +252,6 @@ class vector {
       }
 
       elements += increment;
-
-      for (int i = 0; i < elements; i++) {
-        std::cout << storage[i] << " ";
-      }
     }
 };
 
