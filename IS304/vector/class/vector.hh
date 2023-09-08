@@ -1,22 +1,22 @@
-#ifndef myvector
+#ifndef my_vector
 
 typedef unsigned int sz;
 
 template <typename T>
-class vector {
+class Vector {
   public:
 
     /** Constructor vacio para inicializar un vector sin elementos.
       * con capacidad de 5 y 0 elementos.
       * @result instancia de una clase con un vector sin elementos.
       * */
-    vector() : capacity(5), elements(0), storage(new T[capacity]) { };
+    Vector() : capacity(5), elements(0), storage(new T[capacity]) { };
 
     /** Constructor para inicializar una instancia de la clase vector con la capacidad
       * que pase como parametro:
       * @result instancia de una clase con un vector sin elementos y con la capacidad elejida.
       * */
-    vector(sz cap): capacity(cap), elements(0), storage(new T[capacity]) { }
+    Vector(sz cap): capacity(cap), elements(0), storage(new T[capacity]) { }
 
     /** Contructor para inicializar un vector como copia de un array, con una capacidad de cinco
       * superior a la del array que se ha copiado:
@@ -24,7 +24,7 @@ class vector {
       * @param size tamaño del arreglo que se va copiar.
       * @result la instancia de la clase con un vector que es copia del array añadido como parametro.
       * */
-    vector(T *array_copy, sz size): capacity(size + 5), elements(size), storage(new T[capacity]) {
+    Vector(T *array_copy, sz size): capacity(size + 5), elements(size), storage(new T[capacity]) {
       for (int i = 0; i < elements; ++i) {
         storage[i] = array_copy[i];
       }
@@ -32,14 +32,15 @@ class vector {
 
     /** Destructor para liberar memoria del heap ocupada por el vector:
       * */
-    ~vector() {
+    ~Vector() {
       delete[] storage;
     }
 
   private:
-    sz capacity;
-    sz elements;
-    T* storage;
+
+    sz capacity; // capacida de elementos del vector.
+    sz elements; // cantidad de elemento del vector.
+    T* storage; // puntero al vector.
 
   /** Función que aumenta la capacidad del vector de elementos.
     * @param increment es el factor de aumento.
@@ -60,7 +61,7 @@ class vector {
     /** Se encarga de devolver si el vector esta vacio o no,
       * devolviendo verdadero de estar vacio y falso en caso contrario
       * */
-    int empty() {
+    bool empty() {
       return elements == 0;
     }
 
@@ -233,7 +234,7 @@ class vector {
       * @param posicion es la posicion donde se insertara el vector.
       * @result el vector con el nuevo vector en la posicion indicada.
       * */
-    void insert_vector(vector<T>& other_vector, sz posicion) {
+    void insert_vector(Vector<T>& other_vector, sz posicion) {
       if (posicion >= elements || posicion < 0) {
         throw std::domain_error("la posicion excede el rango");
       }
