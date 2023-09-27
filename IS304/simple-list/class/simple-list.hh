@@ -1,21 +1,46 @@
-#ifndef my_simple_list
+#ifndef SIMPLE_LIST_HH
+#define SIMPLE_LIST_HH
 
-#include <iostream>
+#include <my-exceptions.hh>
 #include <node.hh>
 
-typedef unsigned int sz;
+typedef unsigned int sz; // tipo de dato para tamaño de la lista.
 
-template <typename T>
-class simpleList {
+/** @class Libreria con la implementación básica de la lista simple:
+  * 
+  * */
+template <typename T> class simpleList {
   public:
 
-    /** Constructor de la clase simpleList, que inicializar la lista vacia:
-      * @result se encarga de instanciar la clase simpleList sin ningun elemento.
+    /** Constructor por defecto:
+      * @result inicializa sin nodos.
       * */
-    simpleList() : first(nullptr), last(nullptr), nodes(0) { };
+    simpleList() : first(nullptr), last(nullptr), nodes(0) { }
 
-    /** Destructor de la clase simpleList, que libera la memoria de la lista.
-      * @result se encarga de eliminar la memoria que no se haya borrado.
+    /** Constructor de copia:
+      * @result inicializa con la copia de la lista.
+      * */
+    simpleList(const simpleList& list_copy) : first(nullptr), last(nullptr), nodes(0) {
+      if (list_copy.empty()) {
+        throw Invalid_argument("La lista a copiar esta vacia");
+      }
+
+      NodeList<T>* current = new NodeList<T>(list_copy.first->getData());
+      NodeList<T>* aux = list_copy.first;
+      first = current;
+
+      while (aux->getNext() != nullptr) {
+        current->setNext(aux->getNext());
+        aux = aux->getNext();
+        current = new NodeList<T>(aux->getData());
+      }
+      last = current;
+
+      nodes = list_copy.size();
+    }
+
+    /** Destructor que libera la memoria:
+      * @result memoria liberada.
       * */
     ~simpleList() {
       NodeList<T>* current = first;
@@ -23,35 +48,101 @@ class simpleList {
         delete current;
         current = current->getNext();
       }
-    };
+    }
 
   private:
   
-    NodeList<T>* first; // puntero al primer elemento de la lista.
-    NodeList<T>* last; // puntero al ultimo elemento de la lista.
-    sz nodes; // total de nodo en la lista
-  
-    /** Se encarga de ver si la lista esta vacia o no.
-      * @return devuelve true si la lista esta vacia, false si no.
-      * */
-    bool empty() {
-      return first == nullptr;
-    }
+    NodeList<T>* first; // puntero al primer elemento.
+    NodeList<T>* last; // puntero al ultimo elemento.
+    sz nodes; // total de nodos.
 
   public:
 
-    /** Se encarga de devolver el total de elementos de la lista.
-      * @return devuelve el total de elementos de la lista. 
+    /** Sobre carga de los parentesis, acceso a informacion del nodo por indice:
+      * @param index indice del nodo.
+      * @return elemento extraido del nodo.
+      * */
+    T& operator()(sz index) {
+      if (index < 0 || index >= nodes) {
+        throw Out_of_range("Indice fuera de rango");
+      }
+
+      NodeList<T>* node_aux = first;
+
+      for (int i = 0; i < index; i++) {
+        node_aux = node_aux->getNext();
+      }
+      
+      return node_aux->getData();
+    }
+
+    /** Sobre carga del igual, igualar esta instancia del objeto a otra:
+      * @param list_copy instancia del objeto a copiar
+      * @result instancia de este objeto igualada a otra.
+      * */
+    void operator=(const simpleList& list_copy) {
+      if (list_copy.empty()) {
+        throw Invalid_argument("La lista a copiar esta vacia");
+      }
+
+      if (!empty()) {
+        NodeList<T>* current = first;
+        while (current != nullptr) {
+          delete current;
+          current = current->getNext();
+        }
+      }
+
+      NodeList<T>* current = new NodeList<T>(list_copy.first->getData());
+      NodeList<T>* aux = list_copy.first;
+      first = current;
+
+      while (aux->getNext() != nullptr) {
+        current->setNext(aux->getNext());
+        aux = aux->getNext();
+        current = new NodeList<T>(aux->getData());
+      }
+      last = current;
+
+      nodes = list_copy.size();
+    }
+
+    /** Sobre carga de operador de inserción para iostream:
+      * @param os referencia a ostream output.
+      * @param vector referencia a lista.
+      * @result lista mostrada por consola.
+      * */
+    friend std::ostream& operator<<(std::ostream& os, const simpleList<T>& lista) {
+      os << "[";
+      for (int i = 0; i < lista.size(); ++i) {
+        os << lista.at(i);
+        if (i < lista.size() - 1) {
+          os << ", ";
+        }
+      }
+      os << ")";
+      return os;
+    }
+
+    /** Obtiene el estado de almacenamiento:
+      * @return true si es vacio, false si no.
+      * */
+    bool empty() const {
+      return first == nullptr;
+    }
+
+    /** Accede al número de elementos:
+      * @return total de elementos. 
       * */
     sz size() const {
       return nodes;
     }
 
-  /** Crea un nuevo nodo y lo enlaza al final junto con la
-    * información que guardara.
-    * @result agrega un nuevo nodo al final de la lista.
-    * */
-    void push_back(T data) {
+    /** Inserta un nuevo nodo al final:
+      * @param data informacion a almacenar.
+      * @result nodo agregado al final.
+      * */
+    void push_back(const T& data) {
       NodeList<T>* new_node = new NodeList<T>(data);
 
       if (empty()) {
@@ -64,25 +155,12 @@ class simpleList {
       nodes++;
     }
 
-    /** Crea un nuevo nodo y lo enlaza al inicio junto con la
-      * información que guardara.
-      * @result agrega un nuevo nodo al inicio de la lista.
-      * */
-    void push_front(T data) {
-      NodeList<T>* new_node = new NodeList<T>(data);
-
-      new_node->setNext(first);
-      first = new_node;
-
-      nodes++;
-    }
-
-    /** Elimina el ultimo nodo de la lista junto con su información.
-      * @result la lista queda sin el ultimo nodo.
+    /** Elimina el ultimo nodo:
+      * @result ultimo nodo elimnado.
       * */
     void pop_back() {
       if (empty()) {
-        throw std::domain_error("list is empty");
+        throw List_empty("la lista esta vacia");
       }
 
       NodeList<T>* node_aux = first;
@@ -94,16 +172,28 @@ class simpleList {
       delete last;
       last = node_aux;
       last->setNext(nullptr);
-
       nodes--;
     }
 
-    /** Elimina el primer nodo de la lista junto con su información.
-      * @result la lista queda sin el primer nodo.
+    /** Inserta un elemento al inicio:
+      * @param data informacion a almacenar.
+      * @result nodo agregado al inicio.
+      * */
+    void push_front(const T& data) {
+      NodeList<T>* new_node = new NodeList<T>(data);
+
+      new_node->setNext(first);
+      first = new_node;
+
+      nodes++;
+    }
+
+    /** Elimina el primer nodo:
+      * @result primer nodo eliminado.
       * */
     void pop_front() {
       if (empty()) {
-        throw std::domain_error("list is empty");
+        throw List_empty("las lista esta vacia");
       }
 
       NodeList<T>* node_aux = first;
@@ -115,14 +205,24 @@ class simpleList {
       nodes--;
     }
 
-    /** Se encarga de insertar un nuevo nodo a la lista con la informacion deseada.
-      * @param data informacion que se desea insertar en la lista.
-      * @param pos posicion en la que se desea insertar un nuevo elemento.
-      * @result inserta un nuevo elemento a la lista en la posicion indicada.
+    /** Inserta un nodo en la posicion indicada:
+      * @param data informacion a almacenar.
+      * @param index posicion a insertar.
+      * @result nodo insertado en la posicion indicada.
       * */
-    void insert_element(T data, sz pos) {
-      if (pos < 0 || pos >= nodes) {
-        throw std::out_of_range("Index out of range");
+    void insert(const T& data, sz index) {
+      if (index < 0 || index >= nodes) {
+        throw Out_of_range("Indice fuera de rango");
+      }
+      
+      if (index == 0) {
+        push_front(data);
+        return;
+      }
+      
+      if (index == nodes - 1) {
+        push_back(data);
+        return;
       }
       
       NodeList<T>* new_node = new NodeList<T>(data);
@@ -130,7 +230,7 @@ class simpleList {
       NodeList<T>* node_ant = first;
       NodeList<T>* node_pos = first;
 
-      for (sz i = 0; i < pos; i++) {
+      for (sz i = 0; i < pos - 1; i++) {
         node_ant = node_ant->getNext();
         node_pos = node_pos->getNext();
       }
@@ -142,38 +242,80 @@ class simpleList {
       nodes++;
     }
 
-    /** Devuelve una referencia que contiene la información del nodo en la posicion indicada.
-      * @param pos posicion en la que se encuentra el nodo.
-      * @return referencia con el elemento en la posicion indicada.
+    /** Accede al elemento de la posicion idicada:
+      * @param index posición del elemento.
+      * @return referencia al elemento del nodo accedido. 
       * */
-    const T& at(sz pos) const {
-      if (pos < 0 || pos >= nodes) {
-        throw std::out_of_range("Index out of range");
+    const T& at(sz index) const {
+      if (index < 0 || index >= nodes) {
+        throw Out_of_range("Indice fuera de rango");
       }
 
       NodeList<T>* node_aux = first;
 
-      for (int i = 0; i < pos; i++) {
+      for (int i = 0; i < index; i++) {
         node_aux = node_aux->getNext();
       }
       
       return node_aux->getData();
     }
 
-    /** Inserta una lista dentro de esta lista desde la posicion indicada.
-      * @param list lista a insertar.
-      * @param pos posicion en la que se desea insertar la lista.
-      * @result la lista con los nuevos elementos insertados.
+    /** Elimina un nodo de la lista:
+      * @param index posicion del nodo.
+      * @result nodo eliminado.
       * */
-    void insert_copylist(const simpleList<T>& list, sz pos) {
-      if (pos < 0 || pos >= nodes) {
-        throw std::out_of_range("Index out of range");
+    void remove(sz index) {
+      if (empty()) {
+        throw List_empty("la lista esta vacia");
+      }
+
+      if (index < 0 || index >= nodes) {
+        throw Out_of_range("indice fuera de rango");
+      }
+
+      if (index == 0) {
+        pop_front();
+        return;
+      }
+      
+      if (index == nodes - 1) {
+        pop_back();
+        return;
+      }
+
+      NodeList<T>* node_ant = first;
+      NodeList<T>* node_pos = first;
+      NodeList<T>* node_del = first;
+
+      for (sz i = 0; i < index; i++) {
+        node_del = node_del->getNext();
+        node_pos = node_pos->getNext();
+        if (i != (index - 1)) {
+          node_ant = node_ant->getNext();
+        }
+      }
+      node_pos = node_pos->getNext();
+      node_ant->setNext(node_pos);
+
+      delete node_del;
+      nodes--;
+    }
+
+    // ! por corregir
+
+    /** Inserta una lista desde la posicion indicada:
+      * @param list lista a insertar.
+      * @param index posicion a insertar.
+      * @result union de la copia de la lista y la original.
+      * */
+    void insert_copylist(const simpleList<T>& list, sz index) {
+      if (index < 0 || index >= nodes) {
+        throw Out_of_range("indice fuera de rango");
       }
       NodeList<T>* node_aux = list.first;
       
       for (int i = 0; i < list.size(); i++) {
-        this->insert_element(node_aux->getData(), pos + i);
-        node_aux = node_aux->getNext();
+
       }
     }
 
@@ -208,36 +350,7 @@ class simpleList {
       list.nodes = 0;
     }
 
-    /** Elimina un nodo de la lista junto con su informacion.
-      * @param pos posicion en la que se encuentra el nodo.
-      * @result la lista queda sin el nodo en la posicion indicada.
-      * */
-    void remove_element(sz pos) {
-      if (empty()) {
-        throw std::domain_error("list is empty");
-      }
-
-      if (pos < 0 || pos >= nodes) {
-        throw std::out_of_range("Index out of range");
-      }
-
-      NodeList<T>* node_ant = first;
-      NodeList<T>* node_pos = first;
-      NodeList<T>* node_del = first;
-
-      for (sz i = 0; i < pos; i++) {
-        node_del = node_del->getNext();
-        node_pos = node_pos->getNext();
-        if (i != (pos - 1)) {
-          node_ant = node_ant->getNext();
-        }
-      }
-      node_pos = node_pos->getNext();
-      node_ant->setNext(node_pos);
-
-      delete node_del;
-      nodes--;
-    }
+    // ! por corregir
 };
 
 #endif

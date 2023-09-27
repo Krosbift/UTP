@@ -1,36 +1,40 @@
-#ifndef my_vector
+#ifndef VECTOR_HH
+#define VECTOR_HH
 
-typedef unsigned int sz;
+#include <my-exceptions.hh>
+#include <iostream>
 
-template <typename T>
-class Vector {
+typedef unsigned int sz; // tipo para el tamaño del vector.
+
+/** @class Libreria con la implementación básica de un vector:
+  * 
+  * */
+template <typename T> class Vector {
   public:
 
-    /** Constructor vacio para inicializar un vector sin elementos.
-      * con capacidad de 5 y 0 elementos.
-      * @result instancia de una clase con un vector sin elementos.
+    /** Constructor por defecto:
+      * @result Inicializa sin elementos con capacidad de 5.
       * */
-    Vector() : capacity(5), elements(0), storage(new T[capacity]) { };
+    Vector() : capacity(5), elements(0), storage(new T[capacity]) { }
 
-    /** Constructor para inicializar una instancia de la clase vector con la capacidad
-      * que pase como parametro:
-      * @result instancia de una clase con un vector sin elementos y con la capacidad elejida.
+    /** Constructor para elegir capacidad inicial:
+      * @param cap capacidad inicial.
+      * @result Inicializa sin elementos y con la capacidad elegida.
       * */
     Vector(sz cap): capacity(cap), elements(0), storage(new T[capacity]) { }
 
-    /** Contructor para inicializar un vector como copia de un array, con una capacidad de cinco
-      * superior a la del array que se ha copiado:
-      * @param array arreglo que se va a copiar y a generar como un vector.
-      * @param size tamaño del arreglo que se va copiar.
-      * @result la instancia de la clase con un vector que es copia del array añadido como parametro.
+    /** Contructor de copia, con capacidad de cinco extra:
+      * @param vector_copy vector a copiar.
+      * @result Inicializa como copia de otro, con capacidad adicional.
       * */
-    Vector(T *array_copy, sz size): capacity(size + 5), elements(size), storage(new T[capacity]) {
+    Vector(const Vector<T>& vector_copy): capacity(vector_copy.size() + 5), elements(vector_copy.size()), storage(new T[capacity]) {
       for (int i = 0; i < elements; ++i) {
-        storage[i] = array_copy[i];
+        storage[i] = vector_copy[i];
       }
     }
 
-    /** Destructor para liberar memoria del heap ocupada por el vector:
+    /** Destructor por defecto:
+      * @result libera memoria no necesaria.
       * */
     ~Vector() {
       delete[] storage;
@@ -38,13 +42,15 @@ class Vector {
 
   private:
 
-    sz capacity; // capacida de elementos del vector.
-    sz elements; // cantidad de elemento del vector.
-    T* storage; // puntero al vector.
+    sz capacity; // capacida de elementos.
+    sz elements; // cantidad de elemento.
+    T* storage; // puntero de acceso.
 
-  /** Función que aumenta la capacidad del vector de elementos.
-    * @param increment es el factor de aumento.
-    * @result aumenta la capacidad del vector.
+  private:
+
+  /** Incrementa la capacidad maxima:
+    * @param increment factor de aumento.
+    * @result capacidad aumentada.
     * */
     void resize(int increment) {
       capacity += increment;
@@ -58,46 +64,78 @@ class Vector {
       storage = new_storage;
     }
 
-    /** Se encarga de devolver si el vector esta vacio o no,
-      * devolviendo verdadero de estar vacio y falso en caso contrario
+  public:
+    
+    /** Sobre carga de corchetes, acceso a los elementos por indice:
+      * @param index posicion del elemento.
+      * @return elemento extraido por su indice.
       * */
-    bool empty() {
+    T& operator[](sz index) {
+      if (index >= elements || index < 0) {
+        throw Out_of_range("Indice fuera de rango");
+      }
+      return storage[index];
+    }
+
+    /** Sobre carga de igual, igualar esta instancia del objeto a otra:
+      * @param vector_copy instancia del objeto a copiar.
+      * @result instancia de este objeto igualada a otra.
+      * */
+    void operator=(const Vector<T>& vector_copy) {
+      delete[] storage;
+      storage = new T[capacity];
+
+      capacity = vector_copy.size() + 5;
+      elements = vector_copy.size();
+
+      for (int i = 0; i < elements; ++i) {
+        storage[i] = vector_copy[i];
+      }
+    }
+
+    /** Sobre carga de operador de inserción para iostream:
+      * @param os referencia a ostream output.
+      * @param vector referencia a vector.
+      * @result vector mostrado por consola.
+      * */
+    friend std::ostream& operator<<(std::ostream& os, const Vector<T>& vector) {
+      os << "[";
+      for (int i = 0; i < vector.size(); ++i) {
+        os << vector.at(i);
+        if (i < vector.size() - 1) {
+          os << ", ";
+        }
+      }
+      os << "]";
+      return os;
+    }
+
+    /** Obtiene el estado de almacenamiento:
+      * @return true si es vacio, false si no.
+      * */
+    bool empty() const {
       return elements == 0;
     }
 
-  public:
-    
-    /** operador de sobrecarga para los corchetes, para acceder a los elementos del vector
-      * con la notacion de acceso comun de arreglos.
-      * @return el elemento del vector en la posicion indicada.
+    /** Accede al número de elementos:
+      * @return total de elementos. 
       * */
-    T& operator[](sz posicion) {
-      if (posicion >= elements || posicion < 0) {
-        throw std::out_of_range("Index out of range");
-      }
-      return storage[posicion];
-    }
-
-
-    /** Retorna el total de elementos del vector.
-      * @return total de elementos del vector. 
-      * */
-    sz size() {
+    sz size() const {
       return elements;
     };
 
-    /** Retorna el total de capacidad del vector libre.
-      * @return espacio libre del vector.
+    /** Accede a la diferencia entre la capacidad y los elementos:
+      * @return espacio libre.
       * */
-    sz waste() {
+    sz waste() const {
       return capacity - elements;
     }
 
-    /** Agrega un elemento al final del vector.
-      * @param element es el elemento a agregar al vector.
-      * @result agrega el elemento al final del vector.
+    /** Inserta un elemento al final:
+      * @param element elemento a Insertar.
+      * @result elemento Insertado al final.
       * */
-    void push_back(T element) {
+    void push_back(const T& element) {
       if (capacity == elements) {
         resize(5);
       }
@@ -106,22 +144,22 @@ class Vector {
       elements++;
     };
 
-    /** Elimina el ultimo elemento del vector.
-      * @result elimina el ultimo elemento del vector.
+    /** Elimina el ultimo elemento:
+      * @result elemento final eliminado.
       * */
     void pop_back() {
       if (empty()){
-        throw std::domain_error("vector is empty");
+        throw Vector_empty("El vector esta vacio");
       }
 
       elements--;
     }
 
-    /** Inserta un elemento al inicio del arreglo y corre el resto
-      * @param element es el elemento a insertar.
-      * @result el vector con el nuevo elemento al inico.
+    /** Inserta un elemento al inicio:
+      * @param element elemento a insertar.
+      * @result elemento insertado al inico.
       * */
-    void push_front(T element) {
+    void push_front(const T& element) {
       if (capacity == elements) {
         resize(5);
       }
@@ -134,12 +172,12 @@ class Vector {
       elements++;
     }
 
-    /** Elimina el primer elemento del vector.
-      * @result el vector sin el primer elemento.
+    /** Elimina el primer elemento:
+      * @result elemento inicial eliminado.
       * */
     void pop_front() {
       if (empty()){
-        throw std::domain_error("vector is empty");
+        throw Vector_empty("El vector esta vacio");
       }
 
       for (int i = 0; i < elements; i++) {
@@ -149,50 +187,50 @@ class Vector {
       elements--;
     };
 
-    /** Inserta un elemento en una posicion determinada del vector.
-      * @param element es el elemento a insertar.
-      * @param posicion es la posicion donde se insertara el elemento.
-      * @result el vector con el nuevo elemento en la posicion indicada.
+    /** Inserta un elemento en una posicion determinada:
+      * @param element elemento a insertar.
+      * @param index posicion donde se insertara el elemento.
+      * @result elemento agregado en la posicion indicada.
       * */
-    void insert_element(T element, sz posicion) {
-      if (posicion > elements && posicion < 0) {
-        throw std::domain_error("Index out of range");
+    void insert(const T& element, sz index) {
+      if (index >= elements || index < 0) {
+        throw Out_of_range("Indice fuera de rango");
       }
 
       if (capacity == elements) {
         resize(5);
       }
       
-      for (int i = elements; i > posicion; i--) {
+      for (int i = elements; i > index; i--) {
         storage[i] = storage[i - 1];
       }
 
-      storage[posicion] = element;
+      storage[index] = element;
       elements++;
     }
 
-    /** Elimina un elemento del vector a partir de la posicion.
-      * @param posicion es la posicion del elemento a eliminar.
-      * @result el vector sin el elemento en la posicion indicada.
+    /** Elimina el elemento de la posicion indicada:
+      * @param index posicion del elemento a eliminar.
+      * @result elemento eliminado.
       * */
-    void remove(sz posicion) {
+    void remove(sz index) {
       if (empty()){
-        throw std::domain_error("vector is empty");
+        throw Vector_empty("El vector esta vacio");
       }
 
-      if (posicion > elements && posicion < 0) {
-        throw std::domain_error("la posicion excede el rango");
+      if (index >= elements || index < 0) {
+        throw Out_of_range("Indice fuera de rango");
       }
       
-      for (int i = posicion - 1; i < elements; i++) {
+      for (int i = index - 1; i < elements; i++) {
         storage[i] = storage[i + 1];
       }
       elements--;
     }
 
-    /** Se encarga de reducir la capacidad del vector a la de elementos que tenga
-      * @result el vector con la nueva capacidad.
-      */
+    /** Lleva el waste a cero:
+      * @result capacidad reducidad a elements.
+      * */
     void shrink_to_fit() {
       T* new_storage = new T[elements];
       
@@ -205,51 +243,53 @@ class Vector {
       capacity = elements;
     }
 
-
-    /** Devuelve una referencia hacia el elemento de una posición especifica del vector:
-      * @param posicion posición del elemento que se va a devolver como referencia.
-      * @return una referencia con la direccion al valor almacena en la posicion solicitada. 
+    /** Intercambia dos elementos:
+      * @param first primer elemento.
+      * @param second segundo elemento.
+      * @result elementos intercambiados.
       * */
-    T& at(sz posicion) {
-      if (posicion >= elements || posicion < 0) {
-        throw std::out_of_range("Index out of range");
+    void swap(sz first, sz second) {
+      if (first >= elements || first < 0 || second >= elements || second < 0) {
+        throw Out_of_range("Indice fuera de rango");
       }
-      return storage[posicion];
+
+      T temp = storage[first];
+      storage[first] = storage[second];
+      storage[second] = temp;
     }
 
-    /** Cambia el valor de un elemento del vector a partir de su posición:
-      * @param posicion posición del elemento que se va a cambiar.
-      * @param element es el elemento que se va a asignar a la posicion.
-      * @result el vector con el nuevo elemento en la posicion indicada. 
+    /** Accede al elemento de la posicion idicada:
+      * @param index posición del elemento.
+      * @return referencia al elemento accedido. 
       * */
-    void at(sz posicion, T& element) {
-      if (posicion >= elements || posicion < 0) {
-        throw std::out_of_range("Index out of range");
+    const T& at(sz index) const {
+      if (index >= elements || index < 0) {
+        throw Out_of_range("Indice fuera de rango");
       }
-      storage[posicion] = element;
+      return storage[index];
     }
 
-    /** Se encarga de insertar un vector en un determinado lugar del vector, teniendo en cuenta que la posición 0 sera la inicial tambien conocida como el primer elemento. (vector[0]).
-      * @param other_vector es el vector a insertar.
-      * @param posicion es la posicion donde se insertara el vector.
-      * @result el vector con el nuevo vector en la posicion indicada.
+    /** Inserta otro vector en una posicion determinada:
+      * @param vector vector a insertar.
+      * @param index posicion donde se insertara.
+      * @result vector añadido a este objeto.
       * */
-    void insert_vector(Vector<T>& other_vector, sz posicion) {
-      if (posicion >= elements || posicion < 0) {
-        throw std::domain_error("la posicion excede el rango");
+    void insert(const Vector<T>& vector, sz index) {
+      if (index >= elements || index < 0) {
+        throw Out_of_range("Indice fuera de rango");
       }
 
-      sz increment = other_vector.elements;
+      sz increment = vector.elements;
       if (capacity < elements + increment) {
         resize(elements + increment);
       }
 
-      for (int i = elements - 1; i >= (int)posicion; i--) {
+      for (int i = elements - 1; i >= index; i--) {
         storage[i + increment] = storage[i];
       }
 
       for (int i = 0; i < increment; i++) {
-        storage[posicion + i] = other_vector.storage[i];
+        storage[index + i] = vector.storage[i];
       }
 
       elements += increment;
