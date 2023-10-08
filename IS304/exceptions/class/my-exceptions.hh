@@ -13,13 +13,4 @@ class Out_of_range : public std::exception {
     const char* what() const noexcept override { return message.c_str(); }
 };
 
-class MyException2 : public std::exception {
-  public:
-    MyException2(const std::string& message) : message(message) { }
-  private:
-    std::string message;
-  public:
-    const char* what() const noexcept override { return message.c_str(); }
-};
-
 #endif
