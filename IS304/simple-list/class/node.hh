@@ -1,57 +1,64 @@
-#ifndef my_node
+#ifndef NODELIST_HH
+#define NODELIST_HH
 
-template <typename T>
-class NodeList {
+/** @class NodeList
+  * @brief Node implementation for a linked list.
+  * 
+  * This class represents a node in a linked list.
+  * 
+  * @tparam T The type of elements stored in the node.
+  * */
+template <typename T> class NodeList {
   public:
 
-    /** Constructor que instancia un nodo sin datos para la lista:
-      * @result Nodo sin información.
+    /** Default constructor:
+      * @result Node without information.
       * */
     NodeList() : data(T()), next(nullptr) { };
 
-    /** Constructor que instancia un nodo con el elemento ingresado al constructor:
-      * @result Nodo con la información añadida.
+    /** Copy constructor with data:
+      * @result Node with the added information.
       * */
     NodeList(const T& data) : data(data), next(nullptr) { };
 
-    /** Destructor que libera la memoria de este nodo:
+    /** Destructor that frees the memory of this node:
       * */
     ~NodeList() { }
 
   private:
 
-    T data; // información que contiene el noto.
-    NodeList* next; // puntero a otro Nodo.
+    T data; // Information contained in the node.
+    NodeList* next; // Pointer to another node.
 
   public:
 
-    /** Recibe un puntero a un nodo para conectar este nodo con el siguiente:
-      * @param nextNode puntero al siguiente nodo.
-      * @result ingresa el elemento en el nodo.
+    /** Sets the pointer to the next node:
+      * @param nextNode Pointer to the next node.
+      * @result Pointer set to the node.
       * */
     void setNext(NodeList* nextNode) {
       next = nextNode;
     }
 
-    /** Se encarga de devolver la direccion de memoria la siguiente nodo
-      * @return dirección al nodo siguiente.
+    /** Gets the pointer to the next node:
+      * @return Pointer to the next node.
       * */
-    NodeList* getNext() {
+    NodeList* getNext() const {
       return next;
     }
 
-    /** Se encarga de ingresar la información a este nodo:
-      * @param newData referencia al elemento que se va a agregar a este nodo.
-      * @result Ingresa la nueva información.
+    /** Sets the information:
+      * @param newData Information of the element.
+      * @result Enters the new information.
       * */
-    void setData(T& newData) {
+    void setData(const T& newData) {
       data = newData;
     }
 
-    /** Se encarga de obtener la información del nodo seleccionado:
-      * @return devuelve la información del nodo.
+    /** Gets the information:
+      * @return Returns the information of the node.
       * */
-    const T& getData() {
+    const T& getData() const {
       return data;
     }
 };

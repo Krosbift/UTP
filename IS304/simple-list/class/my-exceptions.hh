@@ -15,7 +15,7 @@ class Out_of_range : public std::exception {
 
 class List_empty : public std::exception {
   public:
-    Vector_empty(const std::string& message) : message(message) { }
+    List_empty(const std::string& message) : message(message) { }
   private:
     std::string message;
   public:
@@ -24,7 +24,7 @@ class List_empty : public std::exception {
 
 class Invalid_argument : public std::exception {
   public:
-    Vector_empty(const std::string& message) : message(message) { }
+    Invalid_argument(const std::string& message) : message(message) { }
   private:
     std::string message;
   public:

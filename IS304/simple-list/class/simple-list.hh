@@ -4,25 +4,30 @@
 #include <my-exceptions.hh>
 #include <node.hh>
 
-typedef unsigned int sz; // tipo de dato para tamaño de la lista.
+typedef unsigned int sz; // Data type for the size of the list.
 
-/** @class Libreria con la implementación básica de la lista simple:
-  * 
-  * */
-template <typename T> class simpleList {
+/** @class SimpleList
+  * @brief Basic implementation of a simple linked list.
+  *
+  * This class provides a basic implementation of a simple linked list. It supports
+  * operations such as insertion, deletion, access by index, and various utility functions.
+  *
+  * @tparam T The type of elements stored in the list.
+  */
+template <typename T> class SimpleList {
   public:
 
-    /** Constructor por defecto:
-      * @result inicializa sin nodos.
+    /** Default constructor:
+      * @result initializes without nodes.
       * */
-    simpleList() : first(nullptr), last(nullptr), nodes(0) { }
+    SimpleList() : first(nullptr), last(nullptr), nodes(0) { }
 
-    /** Constructor de copia:
-      * @result inicializa con la copia de la lista.
+    /** Copy constructor:
+      * @result initializes with a copy of the list.
       * */
-    simpleList(const simpleList& list_copy) : first(nullptr), last(nullptr), nodes(0) {
+    SimpleList(const SimpleList& list_copy) : first(nullptr), last(nullptr), nodes(0) {
       if (list_copy.empty()) {
-        throw Invalid_argument("La lista a copiar esta vacia");
+        throw Invalid_argument("The list to copy is empty");
       }
 
       NodeList<T>* current = new NodeList<T>(list_copy.first->getData());
@@ -39,10 +44,10 @@ template <typename T> class simpleList {
       nodes = list_copy.size();
     }
 
-    /** Destructor que libera la memoria:
-      * @result memoria liberada.
+    /** Destructor that frees memory:
+      * @result memory freed.
       * */
-    ~simpleList() {
+    ~SimpleList() {
       NodeList<T>* current = first;
       while (current != nullptr) {
         delete current;
@@ -52,19 +57,19 @@ template <typename T> class simpleList {
 
   private:
   
-    NodeList<T>* first; // puntero al primer elemento.
-    NodeList<T>* last; // puntero al ultimo elemento.
-    sz nodes; // total de nodos.
+    NodeList<T>* first; // Pointer to the first element.
+    NodeList<T>* last; // Pointer to the last element.
+    sz nodes; // Total number of nodes.
 
   public:
 
-    /** Sobre carga de los parentesis, acceso a informacion del nodo por indice:
-      * @param index indice del nodo.
-      * @return elemento extraido del nodo.
+    /** Parentheses overload, access node information by index:
+      * @param index index of the node.
+      * @return element extracted from the node.
       * */
     T& operator()(sz index) {
       if (index < 0 || index >= nodes) {
-        throw Out_of_range("Indice fuera de rango");
+        throw Out_of_range("Index out of range");
       }
 
       NodeList<T>* node_aux = first;
@@ -76,13 +81,13 @@ template <typename T> class simpleList {
       return node_aux->getData();
     }
 
-    /** Sobre carga del igual, igualar esta instancia del objeto a otra:
-      * @param list_copy instancia del objeto a copiar
-      * @result instancia de este objeto igualada a otra.
+    /** Assignment operator, assign this object instance to another:
+      * @param list_copy object instance to copy.
+      * @result instance of this object assigned to another.
       * */
-    void operator=(const simpleList& list_copy) {
+    void operator=(const SimpleList& list_copy) {
       if (list_copy.empty()) {
-        throw Invalid_argument("La lista a copiar esta vacia");
+        throw Invalid_argument("The list to copy is empty");
       }
 
       if (!empty()) {
@@ -107,16 +112,16 @@ template <typename T> class simpleList {
       nodes = list_copy.size();
     }
 
-    /** Sobre carga de operador de inserción para iostream:
-      * @param os referencia a ostream output.
-      * @param vector referencia a lista.
-      * @result lista mostrada por consola.
+    /** Insertion operator overload for iostream:
+      * @param os reference to ostream output.
+      * @param vector reference to list.
+      * @result list shown on the console.
       * */
-    friend std::ostream& operator<<(std::ostream& os, const simpleList<T>& lista) {
-      os << "[";
-      for (int i = 0; i < lista.size(); ++i) {
-        os << lista.at(i);
-        if (i < lista.size() - 1) {
+    friend std::ostream& operator<<(std::ostream& os, const SimpleList<T>& list) {
+      os << "(";
+      for (int i = 0; i < list.size(); ++i) {
+        os << list.at(i);
+        if (i < list.size() - 1) {
           os << ", ";
         }
       }
@@ -124,23 +129,23 @@ template <typename T> class simpleList {
       return os;
     }
 
-    /** Obtiene el estado de almacenamiento:
-      * @return true si es vacio, false si no.
+    /** Gets the storage state:
+      * @return true if empty, false if not.
       * */
     bool empty() const {
       return first == nullptr;
     }
 
-    /** Accede al número de elementos:
-      * @return total de elementos. 
+    /** Access the number of elements:
+      * @return total number of elements. 
       * */
     sz size() const {
       return nodes;
     }
 
-    /** Inserta un nuevo nodo al final:
-      * @param data informacion a almacenar.
-      * @result nodo agregado al final.
+    /** Adds a new node to the end:
+      * @param data information to store.
+      * @result node added at the end.
       * */
     void push_back(const T& data) {
       NodeList<T>* new_node = new NodeList<T>(data);
@@ -155,12 +160,12 @@ template <typename T> class simpleList {
       nodes++;
     }
 
-    /** Elimina el ultimo nodo:
-      * @result ultimo nodo elimnado.
+    /** Removes the last node:
+      * @result last node removed.
       * */
     void pop_back() {
       if (empty()) {
-        throw List_empty("la lista esta vacia");
+        throw List_empty("The list is empty");
       }
 
       NodeList<T>* node_aux = first;
@@ -175,9 +180,9 @@ template <typename T> class simpleList {
       nodes--;
     }
 
-    /** Inserta un elemento al inicio:
-      * @param data informacion a almacenar.
-      * @result nodo agregado al inicio.
+    /** Adds an element to the beginning:
+      * @param data information to store.
+      * @result node added at the beginning.
       * */
     void push_front(const T& data) {
       NodeList<T>* new_node = new NodeList<T>(data);
@@ -188,12 +193,12 @@ template <typename T> class simpleList {
       nodes++;
     }
 
-    /** Elimina el primer nodo:
-      * @result primer nodo eliminado.
+    /** Removes the first node:
+      * @result first node removed.
       * */
     void pop_front() {
       if (empty()) {
-        throw List_empty("las lista esta vacia");
+        throw List_empty("The list is empty");
       }
 
       NodeList<T>* node_aux = first;
@@ -205,50 +210,13 @@ template <typename T> class simpleList {
       nodes--;
     }
 
-    /** Inserta un nodo en la posicion indicada:
-      * @param data informacion a almacenar.
-      * @param index posicion a insertar.
-      * @result nodo insertado en la posicion indicada.
-      * */
-    void insert(const T& data, sz index) {
-      if (index < 0 || index >= nodes) {
-        throw Out_of_range("Indice fuera de rango");
-      }
-      
-      if (index == 0) {
-        push_front(data);
-        return;
-      }
-      
-      if (index == nodes - 1) {
-        push_back(data);
-        return;
-      }
-      
-      NodeList<T>* new_node = new NodeList<T>(data);
-
-      NodeList<T>* node_ant = first;
-      NodeList<T>* node_pos = first;
-
-      for (sz i = 0; i < pos - 1; i++) {
-        node_ant = node_ant->getNext();
-        node_pos = node_pos->getNext();
-      }
-      node_pos = node_pos->getNext();
-      
-      node_ant->setNext(new_node);
-      new_node->setNext(node_pos);
-
-      nodes++;
-    }
-
-    /** Accede al elemento de la posicion idicada:
-      * @param index posición del elemento.
-      * @return referencia al elemento del nodo accedido. 
+    /** Accesses the element at the specified position:
+      * @param index position of the element.
+      * @return reference to the accessed node element. 
       * */
     const T& at(sz index) const {
       if (index < 0 || index >= nodes) {
-        throw Out_of_range("Indice fuera de rango");
+        throw Out_of_range("Index out of range");
       }
 
       NodeList<T>* node_aux = first;
@@ -260,17 +228,54 @@ template <typename T> class simpleList {
       return node_aux->getData();
     }
 
-    /** Elimina un nodo de la lista:
-      * @param index posicion del nodo.
-      * @result nodo eliminado.
+    /** Inserts a node at the specified position:
+      * @param data information to store.
+      * @param index position to insert.
+      * @result node inserted at the specified position.
+      * */
+    void insert(const T& data, sz index) {
+      if (index < 0 || index >= nodes) {
+        throw Out_of_range("Index out of range");
+      }
+
+      if (index == 0) {
+        push_front(data);
+        return;
+      }
+
+      if (index == nodes - 1) {
+        push_back(data);
+        return;
+      }
+
+      NodeList<T>* new_node = new NodeList<T>(data);
+
+      NodeList<T>* node_ant = first;
+      NodeList<T>* node_pos = first;
+
+      for (sz i = 0; i < index - 1; i++) {
+        node_ant = node_ant->getNext();
+        node_pos = node_pos->getNext();
+      }
+      node_pos = node_pos->getNext();
+
+      node_ant->setNext(new_node);
+      new_node->setNext(node_pos);
+
+      nodes++;
+    }
+
+    /** Removes a node from the list:
+      * @param index position of the node.
+      * @result node removed.
       * */
     void remove(sz index) {
       if (empty()) {
-        throw List_empty("la lista esta vacia");
+        throw List_empty("The list is empty");
       }
 
       if (index < 0 || index >= nodes) {
-        throw Out_of_range("indice fuera de rango");
+        throw Out_of_range("Index out of range");
       }
 
       if (index == 0) {
@@ -301,56 +306,92 @@ template <typename T> class simpleList {
       nodes--;
     }
 
-    // ! por corregir
-
-    /** Inserta una lista desde la posicion indicada:
-      * @param list lista a insertar.
-      * @param index posicion a insertar.
-      * @result union de la copia de la lista y la original.
+    /** Inserts a list from the specified position:
+      * @param list list to insert.
+      * @param index position to insert.
+      * @result union of the copy of the list and the original.
       * */
-    void insert_copylist(const simpleList<T>& list, sz index) {
+    void insert_copylist(const SimpleList<T>& list, sz index) {
       if (index < 0 || index >= nodes) {
-        throw Out_of_range("indice fuera de rango");
+        throw Out_of_range("Index out of range");
       }
-      NodeList<T>* node_aux = list.first;
-      
-      for (int i = 0; i < list.size(); i++) {
 
+      NodeList<T>* node_aux = list.first;
+
+      SimpleList<T> list_temp;
+
+      for (int i = 0; i < list.size(); i++) {
+        node_aux = node_aux->getNext();
+        list_temp.push_back(node_aux->getData());
       }
+
+      if (index == 0) {
+        list_temp.last->setNext(first);
+        first = list_temp.first;
+      }
+
+      if (index == nodes - 1) {
+        last->setNext(list_temp.first);
+        last = list_temp.last;
+      }
+
+      if (index > 0 && index < nodes - 1) {
+        NodeList<T>* node_ant = first;
+        NodeList<T>* node_pos = first;
+
+        for (sz i = 0; i < index - 1; i++) {
+          node_ant = node_ant->getNext();
+          node_pos = node_pos->getNext();
+        }
+        node_pos = node_pos->getNext();
+
+        node_ant->setNext(list_temp.first);
+        list_temp.last->setNext(node_pos);
+      }
+
+      list_temp.first = nullptr;
+      list_temp.last = nullptr;
+      nodes += list.size();
     }
 
-    /** Inserta una lista dentro de esta lista desde la posicion indicada.
-      * @param list lista a insertar.
-      * @param pos posicion en la que se desea insertar la lista.
-      * @result la lista con los nuevos elementos insertados.
+    /** Inserts a list into this list from the specified position.
+      * @param list list to insert.
+      * @param pos position to insert the list.
+      * @result the list with the new elements inserted.
       * */
-    void insert_heistlist(simpleList<T>& list, sz pos) {
+    void insert_heistlist(SimpleList<T>& list, sz pos) {
       if (pos < 0 || pos >= nodes) {
         throw std::out_of_range("Index out of range");
       }
-      
-      NodeList<T>* node_ant = first;
-      NodeList<T>* node_pos = first;
 
-      for (sz i = 0; i < pos; i++) {
-        node_ant = node_ant->getNext();
+      if (pos == 0) {
+        list.last->setNext(first);
+        first = list.first;
+      }
+
+      if (pos == nodes - 1) {
+        last->setNext(list.first);
+        last = list.last;
+      }
+
+      if (pos > 0 && pos < nodes - 1) {
+        NodeList<T>* node_ant = first;
+        NodeList<T>* node_pos = first;
+
+        for (sz i = 0; i < pos - 1; i++) {
+          node_ant = node_ant->getNext();
+          node_pos = node_pos->getNext();
+        }
         node_pos = node_pos->getNext();
-      }
-      node_pos = node_pos->getNext();
 
-      NodeList<T>* new_node = list.first;
-      node_ant->setNext(new_node);
-
-      for (int i = 0; i < (list.size() - 1); i++) {
-        new_node = new_node->getNext();
+        node_ant->setNext(list.first);
+        list.last->setNext(node_pos);
       }
 
-      new_node->setNext(node_pos);
+      list.first = nullptr;
+      list.last = nullptr;
       nodes += list.size();
-      list.nodes = 0;
     }
-
-    // ! por corregir
 };
 
 #endif

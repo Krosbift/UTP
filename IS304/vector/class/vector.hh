@@ -4,28 +4,32 @@
 #include <my-exceptions.hh>
 #include <iostream>
 
-typedef unsigned int sz; // tipo para el tamaño del vector.
+typedef unsigned int sz; // Type for vector size.
 
-/** @class Libreria con la implementación básica de un vector:
+/** @class Vector
+  * @brief Basic vector implementation.
   * 
+  * This class provides basic functionalities to manipulate a dynamic vector.
+  * 
+  * @tparam T The type of elements stored in the vector.
   * */
 template <typename T> class Vector {
   public:
 
-    /** Constructor por defecto:
-      * @result Inicializa sin elementos con capacidad de 5.
+    /** Default constructor:
+      * @result Initializes with no elements and a capacity of 5.
       * */
     Vector() : capacity(5), elements(0), storage(new T[capacity]) { }
 
-    /** Constructor para elegir capacidad inicial:
-      * @param cap capacidad inicial.
-      * @result Inicializa sin elementos y con la capacidad elegida.
+    /** Constructor to choose initial capacity:
+      * @param cap Initial capacity.
+      * @result Initializes with no elements and the chosen capacity.
       * */
     Vector(sz cap): capacity(cap), elements(0), storage(new T[capacity]) { }
 
-    /** Contructor de copia, con capacidad de cinco extra:
-      * @param vector_copy vector a copiar.
-      * @result Inicializa como copia de otro, con capacidad adicional.
+    /** Copy constructor, with an additional capacity of five:
+      * @param vector_copy Vector to copy.
+      * @result Initializes as a copy of another vector, with additional capacity.
       * */
     Vector(const Vector<T>& vector_copy): capacity(vector_copy.size() + 5), elements(vector_copy.size()), storage(new T[capacity]) {
       for (int i = 0; i < elements; ++i) {
@@ -33,8 +37,8 @@ template <typename T> class Vector {
       }
     }
 
-    /** Destructor por defecto:
-      * @result libera memoria no necesaria.
+    /** Default destructor:
+      * @result Frees unnecessary memory.
       * */
     ~Vector() {
       delete[] storage;
@@ -42,16 +46,16 @@ template <typename T> class Vector {
 
   private:
 
-    sz capacity; // capacida de elementos.
-    sz elements; // cantidad de elemento.
-    T* storage; // puntero de acceso.
+    sz capacity; // Capacity of elements.
+    sz elements; // Number of elements.
+    T* storage; // Access pointer.
 
   private:
 
-  /** Incrementa la capacidad maxima:
-    * @param increment factor de aumento.
-    * @result capacidad aumentada.
-    * */
+    /** Increases the maximum capacity:
+      * @param increment Increase factor.
+      * @result Increased capacity.
+      * */
     void resize(int increment) {
       capacity += increment;
       T* new_storage = new T[capacity];
@@ -66,20 +70,20 @@ template <typename T> class Vector {
 
   public:
     
-    /** Sobre carga de corchetes, acceso a los elementos por indice:
-      * @param index posicion del elemento.
-      * @return elemento extraido por su indice.
+    /** Bracket overload, access to elements by index:
+      * @param index Position of the element.
+      * @return Element extracted by its index.
       * */
     T& operator[](sz index) {
       if (index >= elements || index < 0) {
-        throw Out_of_range("Indice fuera de rango");
+        throw Out_of_range("Index out of range");
       }
       return storage[index];
     }
 
-    /** Sobre carga de igual, igualar esta instancia del objeto a otra:
-      * @param vector_copy instancia del objeto a copiar.
-      * @result instancia de este objeto igualada a otra.
+    /** Equal overload, make this instance of the object equal to another:
+      * @param vector_copy Instance of the object to copy.
+      * @result Instance of this object equalized to another.
       * */
     void operator=(const Vector<T>& vector_copy) {
       delete[] storage;
@@ -93,10 +97,10 @@ template <typename T> class Vector {
       }
     }
 
-    /** Sobre carga de operador de inserción para iostream:
-      * @param os referencia a ostream output.
-      * @param vector referencia a vector.
-      * @result vector mostrado por consola.
+    /** Insertion operator overload for iostream:
+      * @param os Reference to ostream output.
+      * @param vector Reference to vector.
+      * @result Vector displayed on the console.
       * */
     friend std::ostream& operator<<(std::ostream& os, const Vector<T>& vector) {
       os << "[";
@@ -110,30 +114,30 @@ template <typename T> class Vector {
       return os;
     }
 
-    /** Obtiene el estado de almacenamiento:
-      * @return true si es vacio, false si no.
+    /** Get the storage state:
+      * @return True if it's empty, false otherwise.
       * */
     bool empty() const {
       return elements == 0;
     }
 
-    /** Accede al número de elementos:
-      * @return total de elementos. 
+    /** Access the number of elements:
+      * @return Total number of elements. 
       * */
     sz size() const {
       return elements;
     };
 
-    /** Accede a la diferencia entre la capacidad y los elementos:
-      * @return espacio libre.
+    /** Access the difference between capacity and elements:
+      * @return Free space.
       * */
     sz waste() const {
       return capacity - elements;
     }
 
-    /** Inserta un elemento al final:
-      * @param element elemento a Insertar.
-      * @result elemento Insertado al final.
+    /** Insert an element at the end:
+      * @param element Element to insert.
+      * @result Element inserted at the end.
       * */
     void push_back(const T& element) {
       if (capacity == elements) {
@@ -144,20 +148,20 @@ template <typename T> class Vector {
       elements++;
     };
 
-    /** Elimina el ultimo elemento:
-      * @result elemento final eliminado.
+    /** Remove the last element:
+      * @result Last element removed.
       * */
     void pop_back() {
       if (empty()){
-        throw Vector_empty("El vector esta vacio");
+        throw Vector_empty("The vector is empty");
       }
 
       elements--;
     }
 
-    /** Inserta un elemento al inicio:
-      * @param element elemento a insertar.
-      * @result elemento insertado al inico.
+    /** Insert an element at the beginning:
+      * @param element Element to insert.
+      * @result Element inserted at the beginning.
       * */
     void push_front(const T& element) {
       if (capacity == elements) {
@@ -172,12 +176,12 @@ template <typename T> class Vector {
       elements++;
     }
 
-    /** Elimina el primer elemento:
-      * @result elemento inicial eliminado.
+    /** Remove the first element:
+      * @result First element removed.
       * */
     void pop_front() {
       if (empty()){
-        throw Vector_empty("El vector esta vacio");
+        throw Vector_empty("The vector is empty");
       }
 
       for (int i = 0; i < elements; i++) {
@@ -187,14 +191,14 @@ template <typename T> class Vector {
       elements--;
     };
 
-    /** Inserta un elemento en una posicion determinada:
-      * @param element elemento a insertar.
-      * @param index posicion donde se insertara el elemento.
-      * @result elemento agregado en la posicion indicada.
+    /** Insert an element at a specific position:
+      * @param element Element to insert.
+      * @param index Position where the element will be inserted.
+      * @result Element added at the specified position.
       * */
     void insert(const T& element, sz index) {
       if (index >= elements || index < 0) {
-        throw Out_of_range("Indice fuera de rango");
+        throw Out_of_range("Index out of range");
       }
 
       if (capacity == elements) {
@@ -209,17 +213,17 @@ template <typename T> class Vector {
       elements++;
     }
 
-    /** Elimina el elemento de la posicion indicada:
-      * @param index posicion del elemento a eliminar.
-      * @result elemento eliminado.
+    /** Remove the element at the specified position:
+      * @param index Position of the element to remove.
+      * @result Element removed.
       * */
     void remove(sz index) {
       if (empty()){
-        throw Vector_empty("El vector esta vacio");
+        throw Vector_empty("The vector is empty");
       }
 
       if (index >= elements || index < 0) {
-        throw Out_of_range("Indice fuera de rango");
+        throw Out_of_range("Index out of range");
       }
       
       for (int i = index - 1; i < elements; i++) {
@@ -228,8 +232,8 @@ template <typename T> class Vector {
       elements--;
     }
 
-    /** Lleva el waste a cero:
-      * @result capacidad reducidad a elements.
+    /** Reduce the waste to zero:
+      * @result Capacity reduced to elements.
       * */
     void shrink_to_fit() {
       T* new_storage = new T[elements];
@@ -243,14 +247,14 @@ template <typename T> class Vector {
       capacity = elements;
     }
 
-    /** Intercambia dos elementos:
-      * @param first primer elemento.
-      * @param second segundo elemento.
-      * @result elementos intercambiados.
+    /** Swap two elements:
+      * @param first First element.
+      * @param second Second element.
+      * @result Elements swapped.
       * */
     void swap(sz first, sz second) {
       if (first >= elements || first < 0 || second >= elements || second < 0) {
-        throw Out_of_range("Indice fuera de rango");
+        throw Out_of_range("Index out of range");
       }
 
       T temp = storage[first];
@@ -258,25 +262,25 @@ template <typename T> class Vector {
       storage[second] = temp;
     }
 
-    /** Accede al elemento de la posicion idicada:
-      * @param index posición del elemento.
-      * @return referencia al elemento accedido. 
+    /** Access the element at the specified position:
+      * @param index Position of the element.
+      * @return Reference to the accessed element. 
       * */
     const T& at(sz index) const {
       if (index >= elements || index < 0) {
-        throw Out_of_range("Indice fuera de rango");
+        throw Out_of_range("Index out of range");
       }
       return storage[index];
     }
 
-    /** Inserta otro vector en una posicion determinada:
-      * @param vector vector a insertar.
-      * @param index posicion donde se insertara.
-      * @result vector añadido a este objeto.
+    /** Insert another vector at a specific position:
+      * @param vector Vector to insert.
+      * @param index Position where it will be inserted.
+      * @result Vector added to this object.
       * */
     void insert(const Vector<T>& vector, sz index) {
       if (index >= elements || index < 0) {
-        throw Out_of_range("Indice fuera de rango");
+        throw Out_of_range("Index out of range");
       }
 
       sz increment = vector.elements;
@@ -296,4 +300,4 @@ template <typename T> class Vector {
     }
 };
 
-#endif 
+#endif
