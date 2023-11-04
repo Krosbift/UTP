@@ -1,5 +1,5 @@
-#ifndef __RBT_HH__
-#define __RBT_HH__
+#ifndef __RBT_HH
+#define __RBT_HH
 
 #include <iostream>
 #include <vector>
