@@ -1,0 +1,93 @@
+<div class="notebook">
+
+<div class="nb-cell html" name="htm1">
+<h1>Parcial II Parte De Prolog - Santiago Torifa Manso</h1>
+</div>
+
+<div class="nb-cell html" name="htm2">
+<p><b>1.</b> Dada la siguiente lista (5,4,1,2,8,6,9,1,12,1,) crear un programa en prolog que elimine el
+elemento de la posición 5 de la lista, luego verificar si elemento borrado continua en la
+  lista.</p>
+<ul>
+  <li>Se debe mostrar la lista original en pantalla.</li>
+ <li>luego de ejecutar el programa mostrar por pantalla como se ve la lista.</li>
+ <li>paso seguido recalcar que el elemento fue eliminado de la lista.</li>
+</ul>
+</div>
+
+<div class="nb-cell html" name="htm3">
+<p>Para eliminar un elemento en la posición N de una lista con Prolog se puede utilizar:</p>
+</div>
+
+<div class="nb-cell program" name="p1">
+la_lista([5,4,1,2,8,6,9,1,12,1]). % lista del ejercicio a operar
+
+eliminar_en_posicion(_, [], _, []). % caso base, lista vacia, al ser vacia no hay elementos por eliminar
+eliminar_en_posicion(Pos, [_|T], Pos, T) :- !. % caso de exito, el elemento ya ha sido hallado y por ende eliminado
+eliminar_en_posicion(Pos, [H|T], CurrPos, [H|Res]) :- % caso principal recursivo, va sumando la posición de busqueda
+    % Pos: posición del elemento a eliminar.
+    % [H|T]: lista dividida ya en cabeza y cola, en esta se eliminara el elemento.
+    % CurrPos: posición en la que vamos en la lista.
+    % [H|Res]: resultado devuelto.
+    NewPos is CurrPos + 1, 
+    eliminar_en_posicion(Pos, T, NewPos, Res).	
+</div>
+
+<div class="nb-cell html" name="htm5">
+<p>Ejemplo de la eliminación del elemento en la posicion 5:</p>
+</div>
+
+<div class="nb-cell query" data-tabled="true" name="q1">
+la_lista(ListaOriginal), eliminar_en_posicion(5, ListaOriginal, 1, Resultado).
+
+</div>
+
+<div class="nb-cell html" name="htm4">
+<p>Para verificar si un elemento pertenece a una lista con Prolog se puede utilizar:</p>
+</div>
+
+<div class="nb-cell program" name="p2">
+la_lista([5,4,1,2,8,6,9,1,12,1]). % lista del ejercicio a operar
+
+pertenece(X, [X|_]) :- !. % caso de exito, devuelve la lista si el elemento existe
+pertenece(X, [_|T]) :- pertenece(X, T). % caso principal recursivo, busca la existencia del elemento
+</div>
+
+<div class="nb-cell html" name="htm6">
+<p>Al saber que el elemento eliminado fue el 8, se hace la validacion con la siguiente consulta:</p>
+</div>
+
+<div class="nb-cell query" data-tabled="true" name="q2">
+la_lista(ListaOriginal), pertenece(8, ListaOriginal).
+</div>
+
+<div class="nb-cell html" name="htm7">
+<h3>Resultado del ejercicio:</h3>
+</div>
+
+<div class="nb-cell program" name="p3">
+la_lista([5,4,1,2,8,6,9,1,12,1]). % lista del ejercicio a operar
+
+eliminar_en_posicion(_, [], _, []). % caso base, lista vacia, al ser vacia no hay elementos por eliminar
+eliminar_en_posicion(Pos, [_|T], Pos, T) :- !. % caso de exito, el elemento ya ha sido hallado y por ende eliminado
+eliminar_en_posicion(Pos, [H|T], CurrPos, [H|Res]) :- % caso principal recursivo, va sumando la posición de busqueda
+    % Pos: posición del elemento a eliminar.
+    % [H|T]: lista dividida ya en cabeza y cola, en esta se eliminara el elemento.
+    % CurrPos: posición en la que vamos en la lista.
+    % [H|Res]: resultado devuelto.
+    NewPos is CurrPos + 1, 
+    eliminar_en_posicion(Pos, T, NewPos, Res).
+
+pertenece(X, [X|_]) :- !. % caso de exito, devuelve la lista si el elemento existe
+pertenece(X, [_|T]) :- pertenece(X, T). % caso principal recursivo, busca la existencia del elemento
+</div>
+
+<div class="nb-cell html" name="htm8">
+<p>Al devolver falso significa que el elemento no existe ya en la lista, lo que quiere decir que fue eliminado correctamente.</p>
+</div>
+
+<div class="nb-cell query" data-tabled="true" name="q3">
+la_lista(ListaOriginal), eliminar_en_posicion(5, ListaOriginal, 1, Resultado), pertenece(8, Resultado).
+</div>
+
+</div>
