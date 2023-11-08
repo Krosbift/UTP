@@ -157,7 +157,7 @@ template <typename T> class SkipList {
       if (current != nullptr and current->data == data) {
         for (int i = 0; i <= Level; i++) {
           if (Update[i]->next[i] != current) {
-            break;
+            i = level + 1;
           } else {
             Update[i]->next[i] = current->next[i];
           }
