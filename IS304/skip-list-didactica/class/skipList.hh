@@ -157,7 +157,7 @@ template <typename T> class SkipList {
       if (current != nullptr and current->data == data) {
         for (int i = 0; i <= Level; i++) {
           if (Update[i]->next[i] != current) {
-            break;
+            i = i + (Level + 1);
           } else {
             Update[i]->next[i] = current->next[i];
           }
@@ -207,16 +207,45 @@ template <typename T> class SkipList {
       * @result SkipList presentada en pantalla por niveles.
       * */
     friend std::ostream& operator<<(std::ostream& os, const SkipList<T>& skipList) {
+      if (skipList.head == nullptr) {
+        os << "La lista está vacía." << std::endl;
+        return os;
+      }
+
       os << "skip List:" << std::endl;
 
       for (int i = skipList.Level; i >= 0; i--) {
+        int previusSpaces = 0;
+        Node<T>* base = skipList.head->next[0];
         Node<T>* current = skipList.head->next[i];
-        os << "Level " << i << ": ";
+        if (i >= 10) {
+          os << "Level " << i << ": ";
+        } else {
+          os << "Level  " << i << ": ";
+        }
         while (current != nullptr) {
+          int Spaces = previusSpaces;
+          int temporal = Spaces;
+          while (base != nullptr && base->data <= current->data && i != 0) {
+            if (temporal != 0) {
+              if (base->data >= 0) {
+                if (base->data > 9) {
+                  os << "   ";
+                } else {
+                  os << "  ";
+                }
+              } else {
+                os << "   ";
+              }
+            }
+            base = base->next[0];
+            temporal--;
+          }
+          previusSpaces = Spaces;
           os << current->data << " ";
           current = current->next[i];
         }
-        os << std::endl;
+        os << endl;
       }
 
       return os;
