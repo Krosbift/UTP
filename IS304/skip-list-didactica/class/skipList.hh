@@ -12,6 +12,7 @@ using namespace std;
 
 /** Clase Nodo que se usa para crear la lista de saltos.
   * @class Node - Contrulle una structura con dos datos.
+  * @private key - Clave de la información a almacenar.
   * @private data - Información a almacenar.
   * @private next - Vector de nodos siguientes.
   * @include <iostream>, <random>, <vector>
@@ -24,12 +25,13 @@ template <typename T> class Node {
       * un vector de nodos del nivel del que se va a generar y todas
       * estas posiciones se les define primero como nullptr inicialmente.
       * */
-    Node(T data, int Level) : data(data), next(Level + 1, nullptr) { }
+    Node(int key, T data, int Level) : key(key), data(data), next(Level + 1, nullptr) { }
 
 
   public:
 
 
+    int key; // Clave de la información a almacenar.
     T data; // Información almacenada por el nodo.
     vector<Node<T>*> next; // Vector que contendra las direcciones a los nodos siguientes.
 
@@ -51,7 +53,7 @@ template <typename T> class SkipList {
       * @result
       * */
     SkipList() {
-      head = new Node(0, 1);
+      head = new Node(0, 0, 1);
       Level = 0;
     }
 
@@ -74,15 +76,17 @@ template <typename T> class SkipList {
     int growthNode() {
       random_device rd;
       mt19937 generator(rd());
-      uniform_int_distribution<int> distribution(0, 1);
+      uniform_int_distribution<int> distribution(1, 100);
 
       int totalGrowthLevels = 0;
-      int numInAttempt = 0;
+      int numGenerate = 0;
 
-      while (!numInAttempt) {
-        numInAttempt = distribution(generator);
+      while (numGenerate <= 50) {
+        numGenerate = distribution(generator);
         totalGrowthLevels++;
       }
+      totalGrowthLevels--;
+      
       return totalGrowthLevels;
     }
 
@@ -97,11 +101,12 @@ template <typename T> class SkipList {
       * el vector de nodos siguientes para hallar en donde se debe hacer
       * la inserción y crea el nodo con los niveles que se generaran,
       * si el elemento ya existe no hace nada.
+      * @param key - Clave de la información a almacenar.
       * @param data - Información a almacenar.
       * @result nodo insertado en la lista de saltos.
       * */
-    void insert(const T& data) {
-      int newLevel = growthNode() - 1; 
+    void insert(const int& key, const T& data) {
+      int newLevel = growthNode(); 
 
       if (Level < newLevel) {
         head->next.resize(newLevel + 1, nullptr);
@@ -109,25 +114,25 @@ template <typename T> class SkipList {
       }
 
       Node<T>* current = head;
-      vector<Node<T>*> Update(Level + 1, nullptr);
+      vector<Node<T>*> Update(Level + 1, nullptr); 
 
       for (int i = Level; i >= 0; i--) {
-        while (current->next[i] and current->next[i]->data < data)  {
+        while (current->next[i] && current->next[i]->key < key)  {
           current = current->next[i];
         }
         Update[i] = current;
       }
       current = current->next[0];
 
-      if (current == nullptr || current->data != data) {
-        Node<T>* newNode = new Node<T>(data, Level);
+      if (current == nullptr || current->key != key) {
+        Node<T>* newNode = new Node<T>(key, data, Level);
         for (int i = 0; i <= newLevel; i++) {
           newNode->next[i] = Update[i]->next[i];
           Update[i]->next[i] = newNode;
         }
-        cout << "Informacion " << data << " Insercion realizada con exito.\n";
+        cout << "Informacion con llave " << key << " y valor " << data << " se inserto con exito.\n";
       } else {
-        cout << "Informacion " << data << " Informacion existente, insercion no realizada.\n";
+        cout << "Llave " << key << " existente, insercion no realizada.\n";
       }
     }
 
@@ -138,15 +143,15 @@ template <typename T> class SkipList {
       * luego se recorre la lista para hallar el nodo a elminar, si este
       * existe se elimina del heap y se hace el reenlace con los nodos
       * almacenados por el vector.
-      * @param data - Información a eliminar.
+      * @param key - Información a eliminar.
       * @result nodo eliminado de la lista de saltos.
       * */
-    void remove(const T& data) {
+    void remove(const T& key) {
       Node<T>* current = head;
       vector<Node<T>*> Update(Level + 1, nullptr);
 
       for (int i = Level; i >= 0; i--) {
-        while (current->next[i] and current->next[i]->data < data) {
+        while (current->next[i] && current->next[i]->key < key) {
           current = current->next[i];  
         }
         Update[i] = current;
@@ -154,7 +159,7 @@ template <typename T> class SkipList {
 
       current = current->next[0];
 
-      if (current != nullptr and current->data == data) {
+      if (current != nullptr && current->key == key) {
         for (int i = 0; i <= Level; i++) {
           if (Update[i]->next[i] != current) {
             i = i + (Level + 1);
@@ -164,12 +169,12 @@ template <typename T> class SkipList {
         }
         delete current;
 
-        while (Level > 0 and head->next[Level] == nullptr) {
+        while (Level > 0 && head->next[Level] == nullptr) {
           Level--;
         }
-        cout << "Informacion " << data << " Informacion eliminada con exito."<<endl;
+        cout << "Llave " << key << " eliminada con exito."<<endl;
       } else {
-        cout << "Informacion " << data << " Informacion no encontrada."<<endl;
+        cout << "Llave " << key << " no existente."<<endl;
       }
     }
 
@@ -179,29 +184,29 @@ template <typename T> class SkipList {
       * busca el nodo en la lista con saltos, si lo encuentra avisa
       * que lo hallo y lo devuelve, de lo contrario avisa que no lo
       * hallo y devuelve un false.
-      * @param data - Información a buscar.
+      * @param key - Información a buscar.
       * @return información contenida por el nodo.
       * */
-    T search(const T& data) {
+    T search(const T& key) {
       Node<T>* current = head;
       for (int i = Level; i >= 0; i--) {
-        while (current->next[i] and current->next[i]->data < data) {
+        while (current->next[i] && current->next[i]->key < key) {
           current = current->next[i];
         }
       }
 
       current = current->next[0];
 
-      if (current != nullptr && current->data == data) {
-        cout << "Informacion " << data << " Informacion encontrada.\n";
+      if (current != nullptr && current->key == key) {
+        cout << "Informacion con llave " << key << " encontrada.\n";
         return current->data;
       } else {
-        cout << "Informacion " << data << " Informacion no encontrada.\n";
+        cout << "Informacion con llave " << key << " no encontrada.\n";
         return false;
       }
     }
 
-
+    
     /** sobrecarga del << de iostream:
       * @param os Referencia al puente de salida de ostream.
       * @result SkipList presentada en pantalla por niveles.
@@ -226,10 +231,10 @@ template <typename T> class SkipList {
         while (current != nullptr) {
           int Spaces = previusSpaces;
           int temporal = Spaces;
-          while (base != nullptr && base->data <= current->data && i != 0) {
+          while (base != nullptr && base->key <= current->key && i != 0) {
             if (temporal != 0) {
-              if (base->data >= 0) {
-                if (base->data > 9) {
+              if (base->key >= 0) {
+                if (base->key > 9) {
                   os << "   ";
                 } else {
                   os << "  ";
@@ -242,7 +247,7 @@ template <typename T> class SkipList {
             temporal--;
           }
           previusSpaces = Spaces;
-          os << current->data << " ";
+          os << current->key << " ";
           current = current->next[i];
         }
         os << endl;
