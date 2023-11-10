@@ -72,9 +72,9 @@ template <typename T> class SkipList {
       * @return crecimiento total del nodo.
       * */
     int growthNode() {
-      std::random_device rd;
-      std::mt19937 generator(rd());
-      std::uniform_int_distribution<int> distribution(0, 1);
+      random_device rd;
+      mt19937 generator(rd());
+      uniform_int_distribution<int> distribution(0, 1);
 
       int totalGrowthLevels = 0;
       int numInAttempt = 0;
