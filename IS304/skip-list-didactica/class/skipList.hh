@@ -25,7 +25,7 @@ template <typename T> class Node {
       * un vector de nodos del nivel del que se va a generar y todas
       * estas posiciones se les define primero como nullptr inicialmente.
       * */
-    Node(int key, T data, int Level) : key(key), data(data), next(Level + 1, nullptr) { }
+    Node(int key, T data, int Level) : key(key), data(data), next(Level, nullptr) { }
 
 
   public:
