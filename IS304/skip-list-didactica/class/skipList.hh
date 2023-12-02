@@ -143,7 +143,7 @@ template <typename T> class SkipList {
       * luego se recorre la lista para hallar el nodo a elminar, si este
       * existe se elimina del heap y se hace el reenlace con los nodos
       * almacenados por el vector.
-      * @param key - Información a eliminar.
+      * @param key - clave de la información a eliminar.
       * @result nodo eliminado de la lista de saltos.
       * */
     void remove(const T& key) {
@@ -184,7 +184,7 @@ template <typename T> class SkipList {
       * busca el nodo en la lista con saltos, si lo encuentra avisa
       * que lo hallo y lo devuelve, de lo contrario avisa que no lo
       * hallo y devuelve un false.
-      * @param key - Información a buscar.
+      * @param key - clave de la información a buscar.
       * @return información contenida por el nodo.
       * */
     T search(const T& key) {
