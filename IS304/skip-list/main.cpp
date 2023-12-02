@@ -1,13 +1,14 @@
 #include <iostream>
-#include <skip-list.hh>
+#include "skipList.hh"
 
-using namespace std;
 
 int main() {
-    SkipList<int> s;
-    s.insert(1);
-    s.insert(2);
-    cout << s.search(1) << endl;
-    s.remove(1);
-    return 0;
-} 
+    SkipList<int> skipList;
+
+    for (int i = 0; i < 32; i++) {
+      skipList.insert(i, i*50);
+    }
+    std::cout << skipList << std::endl;
+    
+  return 0;
+}
