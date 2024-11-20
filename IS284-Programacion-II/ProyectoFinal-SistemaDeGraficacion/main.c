@@ -15,7 +15,7 @@
 ║ │ - Programa de Ingenieria de Sistemas y Computacion                                    │                                                                        │ ║
 ║ ├───────────────────────────────────────────────────────────────────────────────────────┴────────────────────────────────────────────────────────────────────────┤ ║
 ║ │                                                                                                                                                                │ ║
-║ │ Proyecto Final: programa de archivos con registro de usuario y contraseña encriptada, ademas de una funcionalidad de graficar uan funcion polinomica que       │ ║
+║ │ Proyecto Final: programa de archivos con registro de usuario y contraseña encriptada, ademas de una funcionalidad de graficar una funcion polinomica que       │ ║
 ║ │                 pertenezca al usuario correspondiente o al administrador llamado usuario root                                                                  │ ║
 ║ │                                                                                                                                                                │ ║
 ║ └────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ ║
