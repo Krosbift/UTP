@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Love Coffe</title>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
+
+<style>
+	html,
+	body {
+		margin: 0;
+		width: 100vw;
+		min-height: 100vh;
+	}
+
+	body {
+		background-image: url("../assets/background.webp");
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: start;
+		background-attachment: fixed;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	@media (max-width: 768px) {
+	body {
+			padding: 25px;
+		}
+	}
+</style>

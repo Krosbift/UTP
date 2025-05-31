@@ -1,0 +1,126 @@
+<div class="order-list">
+  <span>Lista de pedidos</span>
+  <div class="person-image" id="person-image-orderlist"></div>
+  <span id="order-text-orderlist"></span>
+  <div class="ingredients" id="ingredients-orderlist">
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+  </div>
+</div>
+
+<script>
+  import { LoveCoffe } from "../service/love-coffe.service.astro";
+
+  const loveCoffe = LoveCoffe.getInstance();
+  const { order, ingredientUrls, characterUrl } = loveCoffe.initGameOrderList();
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const personImageDiv = document.getElementById("person-image-orderlist");
+    if (personImageDiv && characterUrl) {
+      personImageDiv.style.backgroundImage = `url('${characterUrl}')`;
+    }
+
+    const orderTextSpan = document.getElementById("order-text-orderlist");
+    if (orderTextSpan && order) {
+      orderTextSpan.textContent = order as string;
+    }
+
+    const ingredientsContainer = document.getElementById(
+      "ingredients-orderlist",
+    );
+    if (
+      ingredientsContainer &&
+      ingredientUrls &&
+      Array.isArray(ingredientUrls)
+    ) {
+      const itemsHTML = ingredientsContainer.querySelectorAll(".item");
+      itemsHTML.forEach((item: Element, index: number) => {
+        const htmlItem = item as HTMLElement;
+        if (ingredientUrls[index] && ingredientUrls[index].url) {
+          htmlItem.style.backgroundImage = `url('${ingredientUrls[index].url}')`;
+        }
+
+        if (itemsHTML.length === 3 && index === 1) {
+          htmlItem.style.borderLeft = "10px solid #e8b77d";
+          htmlItem.style.borderRight = "10px solid #e8b77d";
+        }
+      });
+    }
+  });
+</script>
+
+<style>
+  .order-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    background-color: #f3d7b5;
+    border: 10px solid #7b3f1d;
+    border-radius: 20px;
+    width: 22vw;
+    height: 60vh;
+  }
+
+  span {
+    font-size: 30px;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .person-image {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    height: 55%;
+  }
+
+  .ingredients {
+    display: flex;
+    flex-direction: row;
+    background-color: #f5d2a2;
+    border: 10px solid #e8b77d;
+    border-radius: 20px;
+    width: 80%;
+    height: 15%;
+  }
+
+  .ingredients .item:nth-child(2) {
+    border-left: 0.5vw solid #e8b77d;
+    border-right: 0.5vw solid #e8b77d;
+  }
+
+  .item {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 33.3%;
+    height: 100%;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .order-list {
+      width: 80vw;
+      height: 60vh;
+    }
+  }
+</style>

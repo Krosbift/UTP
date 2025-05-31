@@ -1,0 +1,57 @@
+name: Deploy to GitHub Pages
+
+on:
+  # Se ejecuta en pushes al branch especificado (ej. main, master)
+  push:
+    branches:
+      - main # O la rama que uses como principal
+  # Permite ejecutar este workflow manualmente desde la pestaña Actions
+  workflow_dispatch:
+
+# Permisos para que GITHUB_TOKEN pueda desplegar en GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Permitir solo un despliegue concurrente, cancelando ejecuciones anteriores
+# Esto es útil para evitar despliegues de commits intermedios
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v4 # O la versión más reciente
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4 # O la versión más reciente
+        with:
+          node-version: '22.14.0' # Especifica la versión de Node que usa tu proyecto
+          cache: 'npm' # O 'yarn', 'pnpm' según tu gestor de paquetes
+
+      - name: Install dependencies
+        run: npm ci # O yarn install --frozen-lockfile, pnpm install --frozen-lockfile
+
+      - name: Build your Astro site
+        run: npm run build # O yarn build, pnpm build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3 # O la versión más reciente
+        with:
+          # Sube todo el directorio dist (por defecto)
+          path: './dist'
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 # O la versión más reciente

@@ -1,0 +1,139 @@
+<div class="reciper">
+  <span>Ingrediente</span>
+  <div class="book-reciper" id="book-reciper">
+    <div class="ingredient" id="reciper-ingredient"></div>
+  </div>
+</div>
+
+<script>
+  import { LoveCoffe } from "../service/love-coffe.service.astro";
+  import type { GetIngredientType } from "../types/get.ingredient.type";
+
+  const loveCoffe = LoveCoffe.getInstance();
+
+  const ingredient = loveCoffe.getIngredient();
+  document.addEventListener("DOMContentLoaded", () => {
+    displayIngredient(ingredient);
+    const bookReciper = document.getElementById("book-reciper");
+    if (bookReciper) {
+      listener(bookReciper);
+    }
+  });
+
+  function listener(bookReciper: HTMLElement) {
+    bookReciper.addEventListener("click", () => {
+      const workingTrayHTML = document.getElementById("working-tray");
+      const ingredientsData = loveCoffe.setIngredient();
+      if (
+        workingTrayHTML &&
+        ingredientsData &&
+        Array.isArray(ingredientsData)
+      ) {
+        const ingredientsHTML = workingTrayHTML.querySelectorAll(".item");
+        ingredientsHTML.forEach((item: Element, index: number) => {
+          const htmlItem = item as HTMLElement;
+          const usedLabel = htmlItem.querySelector(".used") as HTMLElement;
+          const modifiedLabel = htmlItem.querySelector(
+            ".modified",
+          ) as HTMLElement;
+
+          if (ingredientsData[index]) {
+            if (ingredientsData[index].ingredientUrl) {
+              htmlItem.style.backgroundImage = `url('${ingredientsData[index].ingredientUrl}')`;
+            }
+            if (usedLabel) {
+              usedLabel.style.color = ingredientsData[index].used
+                ? "green"
+                : "red";
+            }
+            if (modifiedLabel) {
+              modifiedLabel.style.color = ingredientsData[index].modified
+                ? "green"
+                : "red";
+            }
+          }
+        });
+      }
+      const ingredient = loveCoffe.getIngredient();
+      displayIngredient(ingredient);
+    });
+  }
+
+  function displayIngredient(ingredient: GetIngredientType) {
+    const ingredientDiv = document.getElementById("reciper-ingredient");
+    if (ingredientDiv) {
+      ingredientDiv.style.backgroundImage = `url('${ingredient.firstIngredientUrl}')`;
+    }
+  }
+</script>
+
+<style>
+  .reciper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    background-color: #f3d7b5;
+    border: 8px solid #7b3f1d;
+    border-radius: 20px;
+    width: 22vw;
+    height: 34vh;
+  }
+
+  span {
+    font-size: 30px;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .book-reciper {
+    position: relative;
+    background-image: url("../assets/book.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 80%;
+    height: 70%;
+    cursor: pointer;
+  }
+
+  .ingredient {
+    position: absolute;
+    bottom: 38%;
+    left: 16%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 30%;
+    height: 30%;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .reciper {
+      width: 80vw;
+      height: 34vh;
+    }
+
+    .ingredient {
+      bottom: 38%;
+      left: 22%;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .ingredient {
+      left: 15%;
+    }
+  }
+</style>

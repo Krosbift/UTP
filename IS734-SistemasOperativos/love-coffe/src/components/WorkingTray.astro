@@ -1,0 +1,174 @@
+<div class="working-tray">
+  <span>Bandeja de trabajo</span>
+  <div class="ingredients" id="working-tray">
+    <div class="item" id="element-use" data-index="0">
+      <label class="used">R</label><label class="modified">M</label>
+    </div>
+    <div class="item" id="element-use" data-index="1">
+      <label class="used">R</label><label class="modified">M</label>
+    </div>
+    <div class="item" id="element-use" data-index="2">
+      <label class="used">R</label><label class="modified">M</label>
+    </div>
+    <div class="item" id="element-use" data-index="3">
+      <label class="used">R</label><label class="modified">M</label>
+    </div>
+  </div>
+</div>
+
+<dialog id="modify-dialog">
+  <form method="dialog">
+    <span>¿Desea modificar este ítem?</span>
+    <menu>
+      <button value="cancel">Cancelar</button>
+      <button id="confirm-button" value="confirm">Modificar</button>
+    </menu>
+  </form>
+</dialog>
+
+<script>
+  import { LoveCoffe } from "../service/love-coffe.service.astro";
+
+  const loveCoffe = LoveCoffe.getInstance();
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const items = document.querySelectorAll(".item");
+    const dialog = document.getElementById("modify-dialog");
+    let selectedItem: Element | null = null;
+
+    items.forEach((item) => {
+      item.addEventListener("click", () => {
+        const backgroundImage = window.getComputedStyle(item).backgroundImage;
+        if (backgroundImage === "none") {
+          return;
+        }
+        selectedItem = item;
+        if (dialog) {
+          (dialog as HTMLDialogElement).showModal();
+        }
+      });
+    });
+
+    const confirmButton = document.getElementById("confirm-button");
+    confirmButton?.addEventListener("click", () => {
+      if (selectedItem) {
+        const itemIndex = selectedItem.getAttribute("data-index");
+        const backgroundImage =
+          window.getComputedStyle(selectedItem).backgroundImage;
+        const match = backgroundImage.match(/\/([^/]+)\.png/);
+        const extractedString = match ? match[1] : "";
+        const changeIngredient = loveCoffe.modifyIngredients(
+          extractedString,
+          Number(itemIndex),
+        );
+        const ingredientsData = loveCoffe.getIngrediens();
+        const usedLabel = selectedItem.querySelector(".used") as HTMLElement;
+        const modifiedLabel = selectedItem.querySelector(
+          ".modified",
+        ) as HTMLElement;
+        (selectedItem as HTMLElement).style.backgroundImage =
+          `url('${changeIngredient.ingredientUrl}')`;
+        if (usedLabel) {
+          usedLabel.style.color = ingredientsData[Number(itemIndex)].used
+            ? "green"
+            : "red";
+        }
+        if (modifiedLabel) {
+          modifiedLabel.style.color = ingredientsData[Number(itemIndex)]
+            .modified
+            ? "green"
+            : "red";
+        }
+      }
+      if (dialog) {
+        (dialog as HTMLDialogElement).close();
+      }
+    });
+  });
+</script>
+
+<style>
+  .working-tray {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    background-color: #f3d7b5;
+    border: 8px solid #7b3f1d;
+    border-radius: 20px;
+    width: 24vw;
+    height: 51vh;
+  }
+
+  span {
+    font-size: 30px;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .ingredients {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 10px;
+    width: 90%;
+    height: 80%;
+  }
+
+  label {
+    padding: 0 2px;
+  }
+
+  .item {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: start;
+    justify-content: end;
+    background-color: #f5d2a2;
+    border: 0.5vw solid #e8b77d;
+    border-radius: 20px;
+    width: 90%;
+    height: 90%;
+    cursor: pointer;
+  }
+
+  dialog {
+    border: none;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+
+  menu {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 10px;
+    padding: 0;
+  }
+
+  button {
+    width: 100px;
+    height: 30px;
+  }
+
+  .used,
+  .modified {
+    color: #ff0000;
+    margin: 0 1px;
+    font-weight: bold;
+  }
+
+  @media (max-width: 768px) {
+    .working-tray {
+      width: 80vw;
+      height: 51vh;
+    }
+
+    label {
+      padding: 5px 5px 0px 0px;
+    }
+  }
+</style>

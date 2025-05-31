@@ -1,0 +1,44 @@
+---
+import OrderList from "./OrderList.astro";
+import WorkingTray from "./WorkingTray.astro";
+import Reciper from "./Reciper.astro";
+import NextTurn from "./NextTurn.astro";
+---
+
+<div class="main-container-center">
+  <OrderList />
+  <WorkingTray />
+  <div class="right-section">
+    <Reciper />
+    <NextTurn />
+  </div>
+</div>
+
+<style>
+  .main-container-center {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 50px;
+  }
+
+  .right-section {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  @media (max-width: 768px) {
+    .main-container-center {
+      align-items: center;
+      justify-content: center;
+      flex-direction: column-reverse;
+      gap: 25px;
+    }
+
+    .right-section {
+      gap: 16px;
+    }
+  }
+</style>
