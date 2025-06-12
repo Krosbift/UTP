@@ -1,0 +1,5 @@
+colorama==0.4.6
+prettytable==3.16.0
+setuptools==75.8.0
+wcwidth==0.2.13
+wheel==0.45.1

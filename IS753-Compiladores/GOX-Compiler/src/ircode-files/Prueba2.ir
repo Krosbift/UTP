@@ -1,0 +1,18 @@
+MODULE:::
+FUNCTION::: _actual_main, [], [] I
+locals: {}
+('CONSTI', 5)
+('CONSTI', 4)
+('EQI',)
+('IF',)
+('CONSTI', 1)
+('PRINTI',)
+('ENDIF',)
+('CONSTI', 98)
+('PRINTB',)
+('CONSTI', 0)
+('RET',)
+FUNCTION::: main, [], [] I
+locals: {}
+('CALL', '_actual_main')
+('RET',)

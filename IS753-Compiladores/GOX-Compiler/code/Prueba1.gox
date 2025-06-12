@@ -1,0 +1,31 @@
+func main() int {
+    var x float = 1.5;
+    var y float = 2.5;
+
+    print x;       // 1.5
+    print y;       // 2.5
+
+    // Suma
+    var suma float = x + y;
+    print suma;    // 4.0
+
+    // Resta
+    var resta float = y - x;
+    print resta;   // 1.0
+
+    // Multiplicación
+    var mult float = x * y;
+    print mult;    // 3.75
+
+    // División
+    var div float = y / x;
+    print div;     // 1.666...
+
+    // Comparaciones
+    print x < y;   // true
+    print x > y;   // false
+    print x == y;  // false
+    print x != y;  // true
+
+    return 0;
+}

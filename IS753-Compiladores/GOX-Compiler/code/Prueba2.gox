@@ -1,0 +1,10 @@
+func main() int {
+
+    if (5==4){
+      print 1;
+    }
+
+    print 'b';
+
+    return 0;
+}
