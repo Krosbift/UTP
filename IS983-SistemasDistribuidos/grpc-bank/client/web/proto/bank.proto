@@ -1,0 +1,161 @@
+syntax = "proto3";
+
+package bank.v1;
+
+option java_multiple_files = true;
+option java_package = "com.santiago.grpc.bank.v1";
+option java_outer_classname = "BankProto";
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+
+// =============================== Enums ===============================
+
+enum TransactionType {
+  TRANSACTION_TYPE_UNSPECIFIED = 0;
+  DEPOSIT = 1;
+  WITHDRAW = 2;
+}
+
+// ============================ Modelos Base ============================
+
+message User {
+  uint64 id = 1;
+  string email = 2;
+  string name = 3;
+  bool   active = 4;
+}
+
+message Account {
+  uint64 id = 1;
+  uint64 user_id = 2;
+  bool   active = 3;
+}
+
+message Transaction {
+  uint64 id = 1;
+  uint64 account_id = 2;
+  TransactionType transaction_type = 3;
+  int64  amount = 4;
+  bool   active = 5;
+}
+
+// ============================== UserService ==============================
+
+message GetUserRequest {
+  uint64 id = 1;
+}
+message GetUserResponse {
+  User user = 1;
+}
+
+message ListUsersRequest {}
+message ListUsersResponse {
+  repeated User users = 1;
+}
+
+message CreateUserRequest {
+  string email = 1;
+  string password = 2;
+  string name = 3;
+}
+message CreateUserResponse {
+  User user = 1;
+}
+
+// ============================== AuthService ==============================
+
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+message LoginResponse {
+  User user = 1;
+}
+
+// ============================== AccountService ===========================
+
+message GetAccountByUserRequest {
+  uint64 user_id = 1;
+}
+message GetAccountByUserResponse {
+  Account account = 1;
+}
+
+message ListAccountsRequest {
+  google.protobuf.UInt64Value user_id = 1;
+}
+message ListAccountsResponse {
+  repeated Account accounts = 1;
+}
+
+message CreateAccountRequest {
+  uint64 user_id = 1;
+  google.protobuf.BoolValue active = 2;
+}
+message CreateAccountResponse {
+  Account account = 1;
+}
+
+// =========================== TransactionService ==========================
+
+message ListTransactionsRequest {
+  google.protobuf.UInt64Value account_id = 1;
+  google.protobuf.UInt64Value user_id = 2;
+}
+message ListTransactionsResponse {
+  repeated Transaction transactions = 1;
+}
+
+message CreateTransactionRequest {
+  uint64 account_id = 1;
+  int64 amount = 2;
+  TransactionType transaction_type = 3;
+}
+message CreateTransactionResponse {
+  Transaction transaction = 1;
+  Account account = 2;
+}
+
+message AccountRequest {
+  uint64 account_id = 1;
+}
+
+// ============================ BankService ================================
+
+message BankTotal {
+  int64 total_amount = 1;
+}
+
+message BankTotalUpdate {
+  int64 total_amount = 1;
+}
+
+// ================================ Servicios ==============================
+
+service UserService {
+  rpc GetUser    (GetUserRequest)    returns (GetUserResponse);
+  rpc ListUsers  (ListUsersRequest)  returns (ListUsersResponse);
+  rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
+}
+
+service AuthService {
+  rpc Login (LoginRequest) returns (LoginResponse);
+}
+
+service AccountService {
+  rpc ListAccounts     (ListAccountsRequest)     returns (ListAccountsResponse);
+  rpc CreateAccount    (CreateAccountRequest)    returns (CreateAccountResponse);
+  rpc GetAccountByUser (GetAccountByUserRequest) returns (GetAccountByUserResponse);
+}
+
+service TransactionService {
+  rpc ListTransactions          (ListTransactionsRequest)  returns (ListTransactionsResponse);
+  rpc CreateTransaction         (CreateTransactionRequest) returns (CreateTransactionResponse);
+  rpc StreamAccountTransactions (AccountRequest)           returns (stream Transaction);
+}
+
+service BankService {
+  rpc GetBankTotal    (google.protobuf.Empty) returns (BankTotal);
+  rpc StreamBankTotal (google.protobuf.Empty) returns (stream BankTotalUpdate);
+}

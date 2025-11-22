@@ -1,0 +1,37 @@
+<div class="transactions-page">
+  <ng-container *ngIf="!loading()">
+    <div class="total-card">
+      <div class="top-row">
+        <div class="user-name">{{ userName() || 'Usuario' }}</div>
+        <div class="total-label">Total disponible</div>
+      </div>
+      <div class="total-value">{{ formatCurrency(total()) }}</div>
+    </div>
+  </ng-container>
+
+  <div *ngIf="loading()" class="loading">Cargando transacciones...</div>
+
+  <div *ngIf="!loading() && transactions().length === 0" class="empty">No hay transacciones.</div>
+
+  <div *ngIf="!loading()">
+    <ul class="tx-list">
+      <li class="tx-controls">
+        <div class="controls-left">
+          <input type="number" class="tx-input" [(ngModel)]="amountValue" placeholder="Cantidad" />
+        </div>
+        <div class="controls-right">
+          <button class="btn deposit" (click)="onDeposit()" [disabled]="accountId() == null || amountValue <= 0">Ingreso</button>
+          <button class="btn withdraw" (click)="onWithdrawal()" [disabled]="accountId() == null || amountValue <= 0">Retiro</button>
+        </div>
+      </li>
+
+      <li *ngFor="let tx of transactions()" class="tx-item">
+        <div class="tx-right">
+          <div class="tx-amount" [class.positive]="isDeposit(tx)" [class.negative]="!isDeposit(tx)">
+            {{ formatCurrency( (tx.getAmount && tx.getAmount()) || (tx.amount ?? 0) ) }}
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

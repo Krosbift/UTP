@@ -1,0 +1,120 @@
+
+:root {
+	--bg: #0f172a; /* deep navy */
+	--card: #0b1220;
+	--accent: #06b6d4; /* cyan */
+	--muted: #94a3b8;
+	--surface: #0b1220;
+}
+
+.dashboard-root {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background: linear-gradient(180deg, var(--bg) 0%, #071029 100%);
+	padding: 40px;
+	box-sizing: border-box;
+}
+
+.center-card {
+	width: 100%;
+	max-width: 920px;
+	height: 220px;
+	background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+	border: 1px solid rgba(255,255,255,0.04);
+	border-radius: 12px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	box-shadow: 0 8px 30px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+	padding: 28px;
+}
+
+.bank-name {
+	color: var(--muted);
+	font-size: 20px;
+	letter-spacing: 0.08em;
+}
+
+.total-amount {
+	font-size: 72px;
+	font-weight: 700;
+	color: black;
+	text-align: center;
+}
+
+.hint {
+	color: var(--muted);
+	font-size: 14px;
+}
+
+.users-cards {
+	width: 100%;
+	max-width: 920px;
+	margin-top: 20px;
+	background: transparent;
+	color: #e6eef8;
+}
+
+.users-cards h3 {
+	margin: 0 0 8px 0;
+	font-size: 18px;
+}
+
+.users-note {
+	margin: 0 0 12px 0;
+	color: var(--muted);
+	font-size: 13px;
+}
+
+.users-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 12px;
+}
+
+.user-card {
+	background: var(--card);
+	border-radius: 10px;
+	padding: 12px;
+	box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+	border: 1px solid rgba(255,255,255,0.03);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 64px;
+}
+
+.user-name {
+	font-size: 15px;
+	color: #dbeafe;
+}
+
+.users-footer {
+	margin-top: 14px;
+	color: var(--muted);
+	font-size: 12px;
+}
+
+.account-section { max-width: 920px; margin: 20px auto; padding: 0 12px; }
+.account-card { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius: 10px; padding: 16px; border: 1px solid rgba(255,255,255,0.04); }
+.account-title { color: var(--muted); font-size: 14px; margin-bottom: 6px; }
+.account-id { font-weight: 600; margin-bottom: 12px; }
+.tx-controls { display:flex; gap:8px; align-items:center; margin-bottom:12px; }
+.tx-input { padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background: white; min-width:160px; }
+.btn { padding:8px 12px; border-radius:8px; border:none; cursor:pointer; font-weight:600; }
+.btn.deposit { background:#059669; color:white; }
+.btn.withdraw { background:#dc2626; color:white; }
+.tx-list { list-style:none; padding:0; margin:0; }
+.tx-item { display:flex; justify-content:space-between; padding:8px 0; border-top:1px solid rgba(255,255,255,0.02); }
+.tx-amount.positive { color:#059669; }
+.tx-amount.negative { color:#dc2626; }
+
+@media (max-width: 900px) {
+	.dashboard-root { grid-template-columns: 1fr; padding: 20px; }
+	.users-panel { order: 2; width: 100%; max-width: none; }
+	.center-card { order: 1; width: 100%; max-width: none; height: auto; padding: 24px; }
+}

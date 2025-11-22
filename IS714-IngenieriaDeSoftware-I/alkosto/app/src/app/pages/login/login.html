@@ -1,0 +1,103 @@
+<section class="email-login login-page">
+  <a class="back-link" routerLink="/" title="Volver">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <g
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M15 6l-6 6l6 6"></path>
+      </g>
+    </svg>
+    Volver
+  </a>
+
+  <div class="grid">
+    <div class="left">
+      <h1>Ingresa tu contraseña</h1>
+
+      <p class="helper">
+        Estás ingresando con:
+        <span class="email">{{ email }}</span>
+        <br />
+        <a class="modify" href="/emailVerification" (click)="modifyEmail()">Modificar</a>
+      </p>
+    </div>
+
+    <div class="right">
+      <div class="form-card">
+        <form [formGroup]="passwordForm" (ngSubmit)="onSubmit()">
+          <div class="form-field">
+            <div class="input-with-toggle">
+              <input
+                [type]="showPassword() ? 'text' : 'password'"
+                placeholder="Contraseña"
+                formControlName="password"
+                [class.invalid]="
+                  passwordForm.get('password')?.invalid && passwordForm.get('password')?.touched
+                "
+              />
+
+              <button
+                type="button"
+                class="toggle-visibility"
+                (click)="toggleShowPassword($event)"
+                [attr.aria-pressed]="showPassword()"
+                title="Mostrar / ocultar contraseña"
+              >
+                <svg *ngIf="!showPassword()" viewBox="0 0 24 24" aria-hidden="true">
+                  <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </g>
+                </svg>
+                <svg *ngIf="showPassword()" viewBox="0 0 24 24" aria-hidden="true">
+                  <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.84 21.84 0 0 1 5.06-6.06"></path>
+                    <path d="M1 1l22 22"></path>
+                    <path d="M9.88 9.88a3 3 0 0 0 4.24 4.24"></path>
+                  </g>
+                </svg>
+              </button>
+            </div>
+
+            <div
+              class="field-error"
+              [hidden]="
+                !(
+                  passwordForm.get('password')?.touched &&
+                  passwordForm.get('password')?.hasError('required')
+                )
+              "
+            >
+              La contraseña es requerida.
+            </div>
+            <!-- Mensaje de error general (credenciales inválidas / servidor) -->
+            <div class="form-error" *ngIf="errorMessage()">{{ errorMessage() }}</div>
+          </div>
+
+          <button
+            class="button-primary"
+            type="submit"
+            [disabled]="passwordForm.invalid || submitting()"
+          >
+            Continuar
+          </button>
+        </form>
+
+        <div class="help-box">
+          <h4>Tengo problemas para ingresar</h4>
+          <ul>
+            <li>
+              <a routerLink="/login/options" (click)="changeMethod()"
+                >Probar otro método para ingresar</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
