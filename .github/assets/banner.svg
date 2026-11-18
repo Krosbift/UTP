@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-label="UTP — Ingeniería de Sistemas y Computación">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1020"/>
+      <stop offset="55%" stop-color="#111a35"/>
+      <stop offset="100%" stop-color="#0a2a3a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#34d399"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="0.15" cy="0.2" r="0.5">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.9" cy="0.9" r="0.5">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#34d399" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+    </pattern>
+    <style>
+      .title { font: 800 64px 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #f8fafc; letter-spacing: 2px; }
+      .sub { font: 500 24px 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; fill: #cbd5e1; }
+      .tag { font: 600 15px 'Cascadia Code', 'Fira Code', Consolas, monospace; fill: #94a3b8; }
+      .code { font: 500 15px 'Cascadia Code', 'Fira Code', Consolas, monospace; fill: #ffffff; fill-opacity: 0.10; }
+      .cursor { animation: blink 1.1s steps(1) infinite; }
+      @keyframes blink { 50% { opacity: 0; } }
+      .float { animation: float 6s ease-in-out infinite; }
+      @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    </style>
+  </defs>
+
+  <rect width="1200" height="320" rx="18" fill="url(#bg)"/>
+  <rect width="1200" height="320" rx="18" fill="url(#grid)"/>
+  <rect width="1200" height="320" rx="18" fill="url(#glow1)"/>
+  <rect width="1200" height="320" rx="18" fill="url(#glow2)"/>
+
+  <!-- código decorativo de fondo -->
+  <g class="code">
+    <text x="760" y="58">(define (laberinto n) ...)</text>
+    <text x="820" y="86">int main(void) { return 0; }</text>
+    <text x="790" y="114">template &lt;typename T&gt; class Treap;</text>
+    <text x="850" y="142">color(R) :- region(R).</text>
+    <text x="770" y="170">@RestController class Api {}</text>
+    <text x="840" y="198">always_ff @(posedge clk)</text>
+    <text x="800" y="226">rpc StreamBankTotal (Empty)</text>
+    <text x="860" y="254">var fib int = 1;</text>
+    <text x="780" y="282">ng serve --open</text>
+  </g>
+
+  <g class="float">
+    <text x="72" y="96" class="tag">~/universidad-tecnologica-de-pereira</text>
+    <text x="68" y="168" class="title">UTP</text>
+    <text x="210" y="168" class="title" fill-opacity="0.95">· Ingeniería</text>
+    <text x="72" y="210" class="sub">Sistemas y Computación — de Racket a gRPC, un proyecto a la vez</text>
+    <rect x="72" y="232" width="520" height="4" rx="2" fill="url(#accent)"/>
+    <text x="72" y="270" class="tag">12 asignaturas · 25+ proyectos · 10+ lenguajes<tspan class="cursor" fill="#38bdf8"> ▌</tspan></text>
+  </g>
+</svg>

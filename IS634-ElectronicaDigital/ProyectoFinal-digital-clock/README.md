@@ -1,23 +1,73 @@
-# Sistema de Reloj Digital para FPGA
+<div align="center">
 
-## Descripción Funcional Detallada
+# ⏱️ Reloj digital para FPGA
 
-El dispositivo tiene 4 modos de operación que serán seleccionados mediante la configuración de 2 switches.
+**Electrónica Digital · Proyecto final**
 
-### Modo 1: Operación Normal
-En los displays de 8 segmentos de la tarjeta se observa el funcionamiento del reloj, permitiendo ver la hora actual y su avance.
+![SystemVerilog](https://img.shields.io/badge/SystemVerilog-4B5563?style=flat-square)
+![FPGA](https://img.shields.io/badge/FPGA-0071C5?style=flat-square&logo=intel&logoColor=white)
+![Modos](https://img.shields.io/badge/modos-4-38bdf8?style=flat-square)
+![Testbenches](https://img.shields.io/badge/testbenches-7-34d399?style=flat-square)
 
-### Modo 2: Cambio de Hora
-En los displays de 8 segmentos de la tarjeta se observa la hora actual detenida, mostrando de forma intermitente los dos dígitos de los minutos indicando que a través de dos botones de pulsación se podrá incrementar o decrementar dicho valor. Existe otro botón de pulsación para cambiar entre modificar los minutos o la hora, es decir, pasar a modificar los dos dígitos de la hora (éstos se muestran intermitentemente) y viceversa. En este modo existe un cuarto botón que cuando es presionado, lleva la hora actual configurada a ser la hora del sistema.
+</div>
 
-### Modo 3: Alarma
-En los displays de 8 segmentos de la tarjeta se observa la hora de la alarma actual (por defecto la hora es 08:00 en caso de que nunca se haya configurado alguna alarma). El funcionamiento de configuración es muy similar al Modo 2, con la diferencia adicional de que la hora configurada se guarda como la hora de la alarma actual con el mismo cuarto botón del Modo 2 y no se guarda como hora del sistema.
+[🏠 Inicio](../../README.md) › [Electrónica Digital](../README.md) › **Reloj digital**
 
-### Modo 4: Temporizador
-En los displays de 8 segmentos de la tarjeta se observa 00:00, donde el formato actual representa MM:SS (MM son minutos hasta 99 y SS son segundos hasta 59). Su operación es similar a los Modos 2 y 3 para la configuración, donde los MM o los SS están intermitentes (con el tercer botón se cambia entre MM y SS) hasta que se presiona el cuarto botón, en cuyo caso el temporizador iniciará la cuenta regresiva a partir del último valor configurado en ellos. Si el temporizador está en cuenta regresiva y se vuelve a presionar el cuarto botón el temporizador se pausa hasta que se vuelva a presionar el mismo botón (se toma como botón de Inicio y Pausa). En caso de que el temporizador llegue a 00:00 se detiene la cuenta regresiva, se pone intermitente los dígitos de minutos (Se dispone en modo de configuración de temporizador) y se activa la alarma en el sistema. La alarma se detiene en cuanto se presiona alguno de los cuatro botones o se cambia de modo de operación.
+---
 
-## Habilitación de la Alarma
-El sistema tiene un tercer switch que actuará como habilitador de la alarma. Si está activada, la alarma se activa (un LED inicia a ser intermitente) si la hora de la alarma almacenada coincide con la hora actual del sistema. La alarma se detiene cuando se presiona alguno de los cuatro botones utilizados en los modos 2, 3 y 4.
+## 📌 Descripción funcional
 
-## Nota
-La hora del sistema nunca se detiene, independiente del modo en el que se encuentre, siempre continúa su operación así no se muestre en los displays.
+El dispositivo tiene **4 modos de operación** seleccionados con **2 switches**, y muestra la información en los displays de 7 segmentos de la tarjeta.
+
+| Modo | Nombre | Qué hace |
+| :-: | :--- | :--- |
+| 1️⃣ | 🕐 **Operación normal** | Muestra la hora actual y su avance. |
+| 2️⃣ | ✏️ **Cambio de hora** | Permite ajustar horas y minutos con los botones. |
+| 3️⃣ | 🔔 **Alarma** | Configura la hora de la alarma (por defecto **08:00**). |
+| 4️⃣ | ⏳ **Temporizador** | Cuenta regresiva en formato **MM:SS** con inicio/pausa. |
+
+<details>
+<summary><b>📖 Ver la especificación completa de cada modo</b></summary>
+
+### Modo 1 — Operación normal
+En los displays se observa el funcionamiento del reloj, permitiendo ver la hora actual y su avance.
+
+### Modo 2 — Cambio de hora
+Se observa la hora actual detenida, con los dos dígitos de los minutos parpadeando para indicar que pueden **incrementarse o decrementarse** con dos botones. Un tercer botón alterna entre modificar minutos u horas (cuyos dígitos pasan a parpadear). Un cuarto botón **guarda** la hora configurada como hora del sistema.
+
+### Modo 3 — Alarma
+Se observa la hora de la alarma actual (por defecto **08:00** si nunca se ha configurado). La configuración funciona igual que en el Modo 2, pero el cuarto botón guarda la hora como **hora de la alarma** en lugar de hora del sistema.
+
+### Modo 4 — Temporizador
+Se observa `00:00` en formato **MM:SS** (minutos hasta 99, segundos hasta 59). La configuración es similar a los modos 2 y 3 (el tercer botón alterna entre MM y SS). El cuarto botón **inicia** la cuenta regresiva; si se presiona de nuevo durante la cuenta, la **pausa** (botón de inicio/pausa). Al llegar a `00:00` la cuenta se detiene, los minutos vuelven a parpadear (modo configuración) y se activa la alarma, que se detiene al presionar cualquiera de los cuatro botones o al cambiar de modo.
+
+</details>
+
+### 🔔 Habilitación de la alarma
+
+Un **tercer switch** habilita la alarma. Si está activo y la hora de la alarma coincide con la hora del sistema, un **LED comienza a parpadear**. La alarma se detiene al presionar cualquiera de los cuatro botones de los modos 2, 3 y 4.
+
+> [!NOTE]
+> La hora del sistema **nunca se detiene**: sigue avanzando en cualquier modo, aunque no se muestre en los displays.
+
+## 🗂️ Estructura
+
+```text
+ProyectoFinal-digital-clock/
+├── project/
+│   ├── controlModos.sv              # Módulo tope: selección de modos
+│   └── modules/
+│       ├── mode1/relojHHMM.sv       # Reloj HH:MM
+│       ├── mode2/cambioHora.sv      # Ajuste de hora
+│       ├── mode3/controlAlarma.sv   # Alarma
+│       ├── mode4/                   # Temporizador MM:SS
+│       └── shared/                  # Display 7 segmentos y divisores
+└── test/                            # Testbenches de módulos y de cada modo
+```
+
+## ▶️ Cómo ejecutarlo
+
+- **Simulación:** compila los archivos de `project/` junto con un testbench de `test/` en tu simulador de SystemVerilog (por ejemplo ModelSim/Questa).
+- **FPGA:** crea un proyecto en **Intel Quartus Prime**, agrega `project/`, define `controlModos` como entidad tope y asigna switches, botones, displays y LED según tu tarjeta.
+
+<div align="center"><sub><a href="../README.md">⬅ Volver a Electrónica Digital</a></sub></div>

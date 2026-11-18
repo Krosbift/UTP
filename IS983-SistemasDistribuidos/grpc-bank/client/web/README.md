@@ -1,59 +1,40 @@
-# Web
+<div align="center">
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.6.
+# 🅰️ gRPC Bank — Cliente web
 
-## Development server
+![Angular](https://img.shields.io/badge/Angular%2020-DD0031?style=flat-square&logo=angular&logoColor=white)
+![gRPC-Web](https://img.shields.io/badge/gRPC--Web-244C5A?style=flat-square)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
 
-To start a local development server, run:
+</div>
 
-```bash
-ng serve
-```
+[🏠 Inicio](../../../../README.md) › [Sistemas Distribuidos](../../../README.md) › [gRPC Bank](../../README.md) › **Cliente web**
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+Interfaz en **Angular** que consume los servicios del banco mediante **gRPC‑Web**.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 📄 Páginas
 
-```bash
-ng generate component component-name
-```
+| Página | Descripción |
+| :--- | :--- |
+| 🔐 `login` | Inicio de sesión. |
+| 📝 `register` | Registro de usuarios. |
+| 📊 `dashboard` | Resumen y saldo total del banco en tiempo real. |
+| 💸 `transactions` | Movimientos y nuevas transacciones de la cuenta. |
+| 👤 `user-account` | Datos de la cuenta del usuario. |
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## ▶️ Comandos
 
 ```bash
-ng build
+npm install
+npm start                # ng serve → http://localhost:4200
+npm run build            # compila en dist/
+npm test                 # pruebas unitarias
+npm run generate:grpc    # regenera src/app/grpc a partir de proto/bank.proto (requiere protoc y protoc-gen-grpc-web)
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+> [!IMPORTANT]
+> Los servicios apuntan a un proxy gRPC‑Web en `http://localhost:8081`. Consulta el [README del proyecto](../../README.md) para levantar el servidor y el proxy.
 
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+<div align="center"><sub><a href="../../README.md">⬅ Volver a gRPC Bank</a></sub></div>

@@ -1,31 +1,47 @@
-Perf tests for Alkosto_HamKov-Engineers
+<div align="center">
 
-This folder contains simple k6 and JMeter templates to simulate "typing" into the site's search field. They repeatedly call the backend search endpoint with incremental prefixes to mimic a user typing and the live search behavior.
+# 📈 Alkosto — Pruebas de rendimiento
 
-k6
+![k6](https://img.shields.io/badge/k6-7D64FF?style=flat-square&logo=k6&logoColor=white)
+![JMeter](https://img.shields.io/badge/JMeter-D22128?style=flat-square&logo=apachejmeter&logoColor=white)
+
+</div>
+
+[🏠 Inicio](../../../README.md) › [Ingeniería de Software I](../../README.md) › [Alkosto](../README.md) › **Perf**
+
 ---
-Files:
-- k6/search_typing.js  -- k6 script that picks a term and calls /products/search for each prefix of the term
-- k6/env.json          -- example environment variables (BASE_URL, SEARCH_TERMS)
 
-Run example (local):
-- Install k6: https://k6.io/docs/getting-started/installation
-- From the repo root run:
-    BASE_URL=http://localhost:3000 k6 run perf/k6/search_typing.js
+Plantillas de **k6** y **JMeter** que simulan a un usuario **escribiendo** en el buscador del sitio: llaman repetidamente al endpoint de búsqueda con prefijos incrementales (`i`, `ip`, `iph`, …) para imitar la búsqueda en vivo.
 
-You can also override SEARCH_TERMS with a comma-separated list of terms:
-    BASE_URL=http://localhost:3000 SEARCH_TERMS="iphone,samsung,xiaomi" k6 run perf/k6/search_typing.js
+## 🟣 k6
 
-JMeter
-------
-Files:
-- jmeter/search_typing.jmx  -- basic test plan template. It expects a CSV file `search_terms.csv` in the same folder with a headerless list of terms or a single column named `term`.
+| Archivo | Contenido |
+| :--- | :--- |
+| [`k6/search_typing.js`](k6/search_typing.js) | Elige un término y llama a `/products/search` con cada prefijo. |
+| [`k6/env.json`](k6/env.json) | Variables de ejemplo (`BASE_URL`, `SEARCH_TERMS`). |
 
-Run example:
-- Open the .jmx in JMeter GUI, point the CSV Data Set filename to perf/jmeter/search_terms.csv, set BASE_URL as a user-defined variable if needed, and run.
+1. Instala k6: <https://k6.io/docs/get-started/installation/>
+2. Desde la carpeta `alkosto/` ejecuta:
 
-Notes / Recommendations
-- Ensure the backend endpoints used by these tests are rate-limited/protected when running heavy load in shared environments.
-- For realistic tests, seed SEARCH_TERMS with common product prefixes (from production logs) and add think-times or user session modeling.
-- Watch these k6 metrics: http_req_duration (p95), http_req_failed (rate), and http_reqs (throughput).
+```bash
+BASE_URL=http://localhost:3000 k6 run perf/k6/search_typing.js
 
+# con términos propios
+BASE_URL=http://localhost:3000 SEARCH_TERMS="iphone,samsung,xiaomi" k6 run perf/k6/search_typing.js
+```
+
+## 🔴 JMeter
+
+| Archivo | Contenido |
+| :--- | :--- |
+| [`jmeter/search_typing.jmx`](jmeter/search_typing.jmx) | Plan de prueba base. Espera un archivo `search_terms.csv` en la misma carpeta (una columna de términos, sin encabezado o con encabezado `term`). |
+
+Abre el `.jmx` en la interfaz de JMeter, apunta el *CSV Data Set* a `perf/jmeter/search_terms.csv`, define `BASE_URL` como variable si hace falta y ejecútalo.
+
+## 💡 Recomendaciones
+
+- Protege o limita los endpoints antes de lanzar carga pesada en entornos compartidos.
+- Para pruebas realistas, usa prefijos de productos comunes y añade tiempos de espera entre peticiones.
+- Métricas clave de k6: `http_req_duration` (p95), `http_req_failed` (tasa) y `http_reqs` (rendimiento).
+
+<div align="center"><sub><a href="../README.md">⬅ Volver a Alkosto</a></sub></div>

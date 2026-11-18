@@ -1,0 +1,20 @@
+# Estadísticas de lenguajes en GitHub (Linguist)
+# Excluye librerías de terceros y código generado para que la barra
+# de lenguajes refleje el código escrito a mano.
+
+# Cabeceras y librerías de SDL2 incluidas en el proyecto final de Programación II
+IS284-Programacion-II/ProyectoFinal-SistemaDeGraficacion/src/** linguist-vendored
+
+# Código cliente generado por protoc a partir de bank.proto
+IS983-SistemasDistribuidos/grpc-bank/client/web/src/app/grpc/** linguist-generated
+
+# Módulos de memoria / ROM generados por Quartus
+*.mif linguist-generated
+IS614-ArquitecturaDeComputadores/ProyectoFinal-Computador/inputoutput/VGA/VideoRam*.v linguist-generated
+IS614-ArquitecturaDeComputadores/ProyectoFinal-Computador/inputoutput/VGA/charrom*.v linguist-generated
+
+# Archivos de bloqueo de dependencias
+**/package-lock.json linguist-generated
+
+# Archivos de documentación
+*.md linguist-documentation

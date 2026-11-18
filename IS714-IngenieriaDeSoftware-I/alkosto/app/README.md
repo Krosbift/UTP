@@ -1,59 +1,45 @@
-# App
+<div align="center">
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.0.
+# 🅰️ Alkosto — App
 
-## Development server
+![Angular](https://img.shields.io/badge/Angular%2020-DD0031?style=flat-square&logo=angular&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![SCSS](https://img.shields.io/badge/SCSS-CC6699?style=flat-square&logo=sass&logoColor=white)
+![Netlify](https://img.shields.io/badge/Netlify-00C7B7?style=flat-square&logo=netlify&logoColor=white)
 
-To start a local development server, run:
+</div>
 
-```bash
-ng serve
-```
+[🏠 Inicio](../../../README.md) › [Ingeniería de Software I](../../README.md) › [Alkosto](../README.md) › **App**
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+Frontend de la tienda, construido con **Angular 20**.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 📄 Páginas
 
-```bash
-ng generate component component-name
-```
+| Página | Ruta en el código |
+| :--- | :--- |
+| 🏠 Inicio | `pages/home` |
+| 🗂️ Catálogo | `pages/catalog` |
+| 🔎 Resultados de búsqueda | `pages/search-view` |
+| 📄 Detalle de producto | `pages/details-view` |
+| 🛒 Carrito | `pages/shopping-cart` |
+| 🔐 Login / opciones de login / registro | `pages/login` · `pages/login-options` · `pages/register` |
+| ✉️ Verificación de correo | `pages/email-verification` |
+| 🔑 Actualizar contraseña | `pages/update-password` |
+| 👤 Mi perfil | `pages/my-profile` |
+| 📍 Nuestras tiendas | `pages/our-stores` |
+| ❓ Ayuda | `pages/help-page` |
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## ▶️ Comandos
 
 ```bash
-ng test
+npm install
+npm start        # ng serve → http://localhost:4200
+npm run build    # compila en dist/app/browser
+npm test         # pruebas unitarias (Karma)
 ```
 
-## Running end-to-end tests
+El archivo [`netlify.toml`](netlify.toml) deja lista la configuración para desplegar en **Netlify**.
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+<div align="center"><sub><a href="../README.md">⬅ Volver a Alkosto</a></sub></div>

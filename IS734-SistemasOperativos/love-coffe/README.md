@@ -1,48 +1,77 @@
-# Astro Starter Kit: Basics
+<div align="center">
 
-```sh
-npm create astro@latest -- --template basics
-```
+<img src="public/characters/character1.png" width="72"/>
+<img src="public/characters/character2.png" width="72"/>
+<img src="public/characters/character3.png" width="72"/>
+<img src="public/characters/character4.png" width="72"/>
+<img src="public/characters/character5.png" width="72"/>
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+# ☕ Love Coffe
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+**Sistemas Operativos · Mini proyecto**
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+*Un pequeño juego web de cafetería*
 
-## 🚀 Project Structure
+![Astro](https://img.shields.io/badge/Astro%205-BC52EE?style=flat-square&logo=astro&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-222222?style=flat-square&logo=githubpages&logoColor=white)
 
-Inside of your Astro project, you'll see the following folders and files:
+</div>
+
+[🏠 Inicio](../../README.md) › [Sistemas Operativos](../README.md) › **Love Coffe**
+
+---
+
+## 🎮 Cómo se juega
+
+1. 🧑 Llega un **cliente** con su pedido.
+2. 📖 Consulta el **recetario** para saber qué ingredientes lleva.
+3. 🥛 Recibe ingredientes y transfórmalos cuando haga falta (café → espresso, leche → espuma…).
+4. 🧺 Combínalos en la **bandeja de trabajo** (máximo 4).
+5. ⏭️ Entrega y pasa al **siguiente turno**.
+
+### ☕ Recetas disponibles
+
+`Iced Coffee` · `Affogato` · `Espresso Macchiato` · `Café Bombón` · `Moka`
+
+<div align="center">
+<img src="public/ingredients/Coffee.png" width="44"/>
+<img src="public/ingredients/EspressoCoffe.png" width="44"/>
+<img src="public/ingredients/Milk.png" width="44"/>
+<img src="public/ingredients/FoamedMilk.png" width="44"/>
+<img src="public/ingredients/CondensedMilk.png" width="44"/>
+<img src="public/ingredients/Chocolate.png" width="44"/>
+<img src="public/ingredients/IceCream.png" width="44"/>
+<img src="public/ingredients/Ice.png" width="44"/>
+<img src="public/ingredients/Sugar.png" width="44"/>
+</div>
+
+## 🗂️ Estructura
 
 ```text
-/
+love-coffe/
 ├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── characters/          # Clientes
+│   └── ingredients/         # Sprites de ingredientes
+└── src/
+    ├── components/          # OrderList · WorkingTray · Reciper · NextTurn
+    ├── data/                # Pedidos, recetas, ingredientes y transformaciones
+    ├── enums/               # Cafés e ingredientes (nivel 1 y 2)
+    ├── service/             # Lógica del juego (singleton LoveCoffe)
+    ├── types/
+    ├── layouts/
+    └── pages/index.astro
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## ▶️ Cómo ejecutarlo
 
-## 🧞 Commands
+| Comando | Acción |
+| :--- | :--- |
+| `npm install` | Instala las dependencias |
+| `npm run dev` | Servidor local en `http://localhost:4321` |
+| `npm run build` | Genera el sitio en `./dist/` |
+| `npm run preview` | Previsualiza la versión compilada |
 
-All commands are run from the root of the project, from a terminal:
+El proyecto incluye un *workflow* de GitHub Actions ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)) para publicarlo en **GitHub Pages**.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+<div align="center"><sub><a href="../README.md">⬅ Volver a Sistemas Operativos</a></sub></div>
