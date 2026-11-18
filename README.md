@@ -15,6 +15,7 @@
 [Proyectos destacados](#-proyectos-destacados) ·
 [Tecnologías](#-tecnologías) ·
 [Estructura](#-estructura-del-repositorio) ·
+[📚 Wiki](https://github.com/Krosbift/UTP/wiki) ·
 [Licencia](#-licencia)
 
 </div>
